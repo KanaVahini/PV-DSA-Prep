@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arrays — Pattern Atlas</title>
+<meta name="description" content="A pattern-first revision reference for Array DSA questions, shared between two revisers." />
+<meta name="theme-color" content="#0a0912" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Ambient animated background blobs (glassmorphism backdrop) -->
+<div class="bg-blobs" aria-hidden="true">
+  <span class="b1"></span>
+  <span class="b2"></span>
+  <span class="b3"></span>
+</div>
+
+<!-- Global SVG defs (progress ring gradient, referenced by CSS across the app) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c6bff" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ===================== Name gate ===================== -->
+<div id="gate">
+  <div class="gate-inner">
+    <p class="gate-eyebrow">DSA Revision · Pattern Atlas</p>
+    <h1>Who's revising today?</h1>
+    <p class="gate-sub">Pick your name — your own progress stays editable, and you'll see the other person's too.</p>
+    <div class="picker-row" id="picker-row"></div>
+    <div class="gate-loading" id="gate-loading">
+      <div class="spinner"></div>
+      <p id="gate-loading-text">Loading your progress…</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Main app ===================== -->
+<div id="app-root">
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <div class="mobile-topbar">
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <span class="mt-title" id="mobile-title">Pattern Atlas</span>
+    <span class="avatar-sm" id="mobile-avatar"></span>
+  </div>
+
+  <div class="shell">
+    <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar-brand">
+        <div class="brand-title">Arrays</div>
+        <div class="brand-sub">Pattern Atlas</div>
+      </div>
+      <div id="sidebar-nav"></div>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="avatar-sm" id="sidebar-user-avatar"></span>
+          <select id="user-switch" aria-label="Switch reviser"></select>
+          <span class="sync-dot" id="sync-dot"></span>
+        </div>
+      </div>
+      <div class="sidebar-resize-handle" id="sidebar-resize-handle" title="Drag to resize"></div>
+    </nav>
+
+    <main>
+      <div class="topbar" id="topbar">
+        <nav class="crumb" id="crumb"></nav>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="text" id="search-input" placeholder="Search…" />
+        </div>
+        <div class="field" data-scope="pattern">
+          <label for="difficulty-filter">Difficulty</label>
+          <select id="difficulty-filter">
+            <option value="all">All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <div class="field" data-scope="pattern">
+          <label for="status-filter">Status</label>
+          <select id="status-filter">
+            <option value="all">All</option>
+            <option value="none">Not started</option>
+            <option value="attempted">Attempted</option>
+            <option value="solved">Solved</option>
+            <option value="revise">Needs revision</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="sync-banner" id="sync-banner"></p>
+
+      <div id="view-root"></div>
+
+      <footer class="app-footer">
+        Pruthviraj and Vahini's shared revision tracker. Each of you sees the other's progress and notes; only your own row is editable.
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- Firebase (only activates if FIREBASE_CONFIG is filled in config.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
