@@ -10,15 +10,33 @@
   const USERS = (typeof REVISERS !== "undefined" && REVISERS.length === 2) ? REVISERS : ["Pruthviraj", "Vahini"];
   const USER_GLOW = { [USERS[0]]: "#6d5bff", [USERS[1]]: "#ff5f9e" };
   let currentUser = null;
+  let currentTopicId = null;
   let pendingScrollTarget = null;
 
-  const progressByUser = { [USERS[0]]: {}, [USERS[1]]: {} };
+  const DEFAULT_TOPIC = "arrays";
+
+  // progressByUser[user][topicId] = { [problemId]: {status, notes} }
+  const progressByUser = {};
+  USERS.forEach((u) => { progressByUser[u] = {}; });
+
+  function registry() { return window.TOPIC_REGISTRY || {}; }
+  function topicIds() { return Object.keys(registry()); }
+  function topicEntry(id) { return registry()[id]; }
+  function currentPatterns() { const t = topicEntry(currentTopicId); return t ? t.patterns : []; }
+  function currentTopicMeta() { const t = topicEntry(currentTopicId); return t ? t.topic : { title: "", tagline: "" }; }
+
+  const TOPIC_ACCENTS = ["#7c6bff", "#22d3ee", "#ff5f9e", "#2fd490", "#f5a524"];
+  function topicAccent(id) {
+    const ids = topicIds();
+    return TOPIC_ACCENTS[ids.indexOf(id) % TOPIC_ACCENTS.length];
+  }
 
   // ============================================================
-  // Icons — simple line SVGs, one per pattern + home
+  // Icons — simple line SVGs, one per pattern (across all topics) + home
   // ============================================================
   const ICONS = {
     home: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.5V20h5v-6h2v6h5v-9.5"/></svg>`,
+    // Arrays
     "two-pointers": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h6M21 12h-6"/><path d="M9 8l-6 4 6 4M15 8l6 4-6 4"/></svg>`,
     "sliding-window": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="1.5"/><rect x="8" y="7" width="6" height="10" fill="currentColor" opacity="0.3" stroke="none"/></svg>`,
     "prefix-sum": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h13l-6.5 8L18 20H5"/></svg>`,
@@ -31,7 +49,14 @@
     "monotonic-stack": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V13M9 20V8M14 20V11M19 20V5"/></svg>`,
     greedy: `<svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>`,
     "sorting-tricks": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4 4 7M7 4l3 3"/><path d="M17 20V4M17 20l-3-3M17 20l3-3"/></svg>`,
-    "bit-manipulation": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" rx="1"/><rect x="15" y="9" width="6" height="6" rx="1" fill="currentColor"/></svg>`
+    "bit-manipulation": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" rx="1"/><rect x="15" y="9" width="6" height="6" rx="1" fill="currentColor"/></svg>`,
+    // Linked List
+    "fast-slow-pointers": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="4" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.9" cy="15" r="1.7" fill="currentColor" stroke="none"/></svg>`,
+    reversal: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M3.5 13a9 9 0 1 0 2.6-6.4L3 9"/></svg>`,
+    "gap-technique": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M8 12h8" stroke-dasharray="2.2 2.2"/></svg>`,
+    "dummy-node": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="9" width="5" height="5" rx="1" stroke-dasharray="2 2"/><path d="M8 11.5h4M16 11.5h4"/><circle cx="12" cy="11.5" r="2.3"/></svg>`,
+    "merge-sort-ll": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6l8 6M20 6l-8 6M12 12v6"/><circle cx="4" cy="6" r="1.6" fill="currentColor" stroke="none"/><circle cx="20" cy="6" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="18" r="1.6" fill="currentColor" stroke="none"/></svg>`,
+    rewiring: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="8" width="8" height="8" rx="4"/><rect x="13" y="8" width="8" height="8" rx="4"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -43,18 +68,19 @@
   }
 
   // ============================================================
-  // Store: abstracts Firebase Realtime Database vs. localStorage
+  // Store: abstracts Firebase Realtime Database vs. localStorage.
+  // Data is namespaced per user AND per topic.
   // ============================================================
   const Store = (function () {
     let useFirebase = false;
     let db = null;
 
-    function localKey(user) { return `dsa_progress_${user}`; }
-    function readLocal(user) {
-      try { return JSON.parse(localStorage.getItem(localKey(user))) || {}; }
+    function localKey(user, topicId) { return `dsa_progress_${user}_${topicId}`; }
+    function readLocal(user, topicId) {
+      try { return JSON.parse(localStorage.getItem(localKey(user, topicId))) || {}; }
       catch (e) { return {}; }
     }
-    function writeLocal(user, data) { localStorage.setItem(localKey(user), JSON.stringify(data)); }
+    function writeLocal(user, topicId, data) { localStorage.setItem(localKey(user, topicId), JSON.stringify(data)); }
 
     function init() {
       if (typeof FIREBASE_CONFIG === "object" && FIREBASE_CONFIG !== null && typeof firebase !== "undefined") {
@@ -70,21 +96,21 @@
       return useFirebase;
     }
 
-    function subscribe(user, cb) {
-      if (useFirebase) db.ref("progress/" + user).on("value", (snap) => cb(user, snap.val() || {}));
-      else cb(user, readLocal(user));
+    function subscribe(user, topicId, cb) {
+      if (useFirebase) db.ref(`progress/${user}/${topicId}`).on("value", (snap) => cb(user, topicId, snap.val() || {}));
+      else cb(user, topicId, readLocal(user, topicId));
     }
 
-    function setEntry(user, problemId, patch) {
+    function setEntry(user, topicId, problemId, patch) {
       if (useFirebase) {
         const clean = {};
         Object.keys(patch).forEach((k) => { clean[k] = patch[k] === undefined ? null : patch[k]; });
-        db.ref(`progress/${user}/${problemId}`).update(clean);
+        db.ref(`progress/${user}/${topicId}/${problemId}`).update(clean);
       } else {
-        const data = readLocal(user);
+        const data = readLocal(user, topicId);
         data[problemId] = Object.assign({}, data[problemId], patch);
-        writeLocal(user, data);
-        localListeners.forEach((fn) => fn(user, data));
+        writeLocal(user, topicId, data);
+        localListeners.forEach((fn) => fn(user, topicId, data));
       }
     }
 
@@ -150,20 +176,21 @@
   }
 
   // ============================================================
-  // Progress computation
+  // Progress computation (always relative to the ACTIVE topic)
   // ============================================================
   function computeUserPatternStats(user, pattern) {
     let solved = 0;
     const total = pattern.problems.length;
+    const topicData = (progressByUser[user] || {})[currentTopicId] || {};
     pattern.problems.forEach((problem) => {
-      const entry = (progressByUser[user] || {})[problemIdOf(pattern, problem)];
+      const entry = topicData[problemIdOf(pattern, problem)];
       if (entry && entry.status === "solved") solved++;
     });
     return { solved, total };
   }
   function computeUserTotals(user) {
     let solved = 0, total = 0;
-    PATTERNS.forEach((p) => {
+    currentPatterns().forEach((p) => {
       const s = computeUserPatternStats(user, p);
       solved += s.solved; total += s.total;
     });
@@ -171,25 +198,35 @@
   }
 
   // ============================================================
-  // Router
+  // Router — hash format: #{topicId}/home  or  #{topicId}/pattern/{patternId}
   // ============================================================
   function currentRoute() {
-    const hash = location.hash.replace("#", "") || "home";
-    if (hash.startsWith("pattern/")) return { view: "pattern", id: hash.slice(8) };
-    return { view: "home" };
+    const parts = location.hash.replace("#", "").split("/").filter(Boolean);
+    const topic = parts[0] && topicEntry(parts[0]) ? parts[0] : (currentTopicId || DEFAULT_TOPIC);
+    if (parts[1] === "pattern" && parts[2]) return { topic, view: "pattern", id: parts[2] };
+    return { topic, view: "home" };
   }
 
   function navigate(hash) { location.hash = hash; }
+  function navHome(topicId) { navigate(`${topicId || currentTopicId}/home`); }
+  function navPattern(patternId, topicId) { navigate(`${topicId || currentTopicId}/pattern/${patternId}`); }
 
   function handleRoute() {
     const route = currentRoute();
+    currentTopicId = route.topic;
+    localStorage.setItem("dsa_last_topic", currentTopicId);
+
     closeMobileDrawer();
+    renderTopicSwitcher();
     renderSidebar(route.view === "pattern" ? route.id : "home");
+
     const topbar = document.getElementById("topbar");
     document.getElementById("search-input").value = "";
+    document.getElementById("mobile-title").textContent = currentTopicMeta().title + " · Pattern Atlas";
+
     if (route.view === "pattern") {
-      const pattern = PATTERNS.find((p) => p.id === route.id);
-      if (!pattern) { navigate("#home"); return; }
+      const pattern = currentPatterns().find((p) => p.id === route.id);
+      if (!pattern) { navHome(); return; }
       topbar.classList.add("in-pattern");
       setCrumb(pattern.name);
       renderPatternView(pattern);
@@ -204,10 +241,29 @@
   function setCrumb(patternName) {
     const crumb = document.getElementById("crumb");
     if (!patternName) {
-      crumb.innerHTML = `<span class="current">Home</span>`;
+      crumb.innerHTML = `<span class="current">${currentTopicMeta().title}</span>`;
     } else {
-      crumb.innerHTML = `<a href="#home">Home</a><span class="sep">/</span><span class="current">${patternName}</span>`;
+      crumb.innerHTML = `<a href="#${currentTopicId}/home">${currentTopicMeta().title}</a><span class="sep">/</span><span class="current">${patternName}</span>`;
     }
+  }
+
+  // ============================================================
+  // Topic switcher (sidebar)
+  // ============================================================
+  function renderTopicSwitcher() {
+    const el = document.getElementById("topic-switcher");
+    if (!el) return;
+    el.innerHTML = topicIds().map((id) => {
+      const meta = topicEntry(id).topic;
+      const active = id === currentTopicId;
+      return `<button class="topic-pill ${active ? "active" : ""}" data-topic="${id}" style="--tcolor:${topicAccent(id)}">${meta.title}</button>`;
+    }).join("");
+    el.querySelectorAll("[data-topic]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.topic === currentTopicId) return;
+        navHome(btn.dataset.topic);
+      });
+    });
   }
 
   // ============================================================
@@ -219,7 +275,7 @@
         <span class="nav-icon">${ICONS.home}</span><span class="nav-label">Home</span>
       </button>
       <div class="nav-section-label">Patterns</div>`;
-    PATTERNS.forEach((p) => {
+    currentPatterns().forEach((p) => {
       const stats = currentUser ? computeUserPatternStats(currentUser, p) : { solved: 0, total: p.problems.length };
       html += `<button class="nav-item ${activeId === p.id ? "active" : ""}" data-nav="pattern/${p.id}" data-pattern="${p.id}" style="--pcolor:${p.color}">
         <span class="nav-icon">${ICONS[p.icon]}</span>
@@ -229,13 +285,16 @@
     });
     nav.innerHTML = html;
     nav.querySelectorAll("[data-nav]").forEach((btn) => {
-      btn.addEventListener("click", () => navigate("#" + btn.dataset.nav));
+      btn.addEventListener("click", () => {
+        if (btn.dataset.nav === "home") navHome();
+        else navPattern(btn.dataset.pattern);
+      });
     });
   }
 
   function updateSidebarProgress() {
     document.querySelectorAll(".nav-item[data-pattern]").forEach((item) => {
-      const pattern = PATTERNS.find((p) => p.id === item.dataset.pattern);
+      const pattern = currentPatterns().find((p) => p.id === item.dataset.pattern);
       if (!pattern) return;
       const stats = computeUserPatternStats(currentUser, pattern);
       const el = item.querySelector(".nav-progress");
@@ -267,7 +326,9 @@
   // ============================================================
   function renderHome() {
     showSkeleton(8);
+    const topicAtRequest = currentTopicId;
     setTimeout(() => {
+      if (currentTopicId !== topicAtRequest) return; // topic changed mid-flight, bail
       const totalsHtml = USERS.map((u) => {
         const totals = computeUserTotals(u);
         return `<div class="progress-card">
@@ -279,7 +340,7 @@
         </div>`;
       }).join("");
 
-      const patternCards = PATTERNS.map((p, i) => {
+      const patternCards = currentPatterns().map((p, i) => {
         const searchBlob = (p.name + " " + p.trigger + " " + p.problems.map((x) => x.name).join(" ")).toLowerCase();
         return `<button class="pattern-card stagger-in" style="--pcolor:${p.color};--pcolor-soft:${hexToRgba(p.color, 0.14)};animation-delay:${Math.min(i * 45, 400)}ms" data-pattern="${p.id}" data-search="${escapeHtml(searchBlob)}">
           <div class="icon-badge">${ICONS[p.icon]}</div>
@@ -294,7 +355,7 @@
 
       const html = `
         <h1 class="dash-greeting">Welcome back, ${currentUser}</h1>
-        <p class="dash-sub">${TOPIC.tagline}</p>
+        <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
         <div class="progress-overview">${totalsHtml}</div>
 
@@ -310,7 +371,7 @@
       revealView(html);
 
       document.querySelectorAll(".pattern-card").forEach((card) => {
-        card.addEventListener("click", () => navigate("#pattern/" + card.dataset.pattern));
+        card.addEventListener("click", () => navPattern(card.dataset.pattern));
       });
 
       updateHomeProgress();
@@ -324,7 +385,7 @@
       const pct = totals.total ? totals.solved / totals.total : 0;
       animateRing("user-" + u, pct, Math.round(pct * 100) + "%");
     });
-    PATTERNS.forEach((p) => {
+    currentPatterns().forEach((p) => {
       const stats = computeUserPatternStats(currentUser, p);
       const fill = document.querySelector(`[data-fill="${p.id}"]`);
       const frac = document.querySelector(`[data-frac="${p.id}"]`);
@@ -339,14 +400,15 @@
     const scroll = document.getElementById("revise-scroll");
     if (!box || !scroll) return;
     const items = [];
-    PATTERNS.forEach((p) => {
+    const topicData = (progressByUser[currentUser] || {})[currentTopicId] || {};
+    currentPatterns().forEach((p) => {
       p.problems.forEach((problem) => {
         const pid = problemIdOf(p, problem);
-        const entry = (progressByUser[currentUser] || {})[pid];
+        const entry = topicData[pid];
         if (entry && entry.status === "revise") items.push({ name: problem.name, patternId: p.id, problemId: pid });
       });
     });
-    scroll.innerHTML = items.map((i) => `<a class="revise-chip" href="#pattern/${i.patternId}" data-problem="${i.problemId}" data-pattern-target="${i.patternId}"><span class="dot"></span>${i.name}</a>`).join("");
+    scroll.innerHTML = items.map((i) => `<a class="revise-chip" href="#${currentTopicId}/pattern/${i.patternId}" data-problem="${i.problemId}"><span class="dot"></span>${i.name}</a>`).join("");
     box.classList.toggle("has-items", items.length > 0);
     scroll.querySelectorAll(".revise-chip").forEach((chip) => {
       chip.addEventListener("click", () => { pendingScrollTarget = chip.dataset.problem; });
@@ -365,6 +427,7 @@
   // ============================================================
   function renderProblemCard(pattern, problem) {
     const problemId = problemIdOf(pattern, problem);
+    const topicIdAtRender = currentTopicId;
     const card = document.createElement("article");
     card.className = "problem-card";
     card.dataset.problemId = problemId;
@@ -413,16 +476,17 @@
 
     card.querySelectorAll(".status-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const cur = (progressByUser[currentUser][problemId] || {}).status;
+        const topicData = progressByUser[currentUser][topicIdAtRender] || {};
+        const cur = (topicData[problemId] || {}).status;
         const newStatus = cur === btn.dataset.status ? null : btn.dataset.status;
-        Store.setEntry(currentUser, problemId, { status: newStatus });
+        Store.setEntry(currentUser, topicIdAtRender, problemId, { status: newStatus });
         if (newStatus === "solved") celebrate(btn);
       });
     });
 
     const myTextarea = card.querySelector(`textarea.notes[data-user="${currentUser}"]`);
     if (myTextarea) {
-      myTextarea.addEventListener("blur", () => Store.setEntry(currentUser, problemId, { notes: myTextarea.value }));
+      myTextarea.addEventListener("blur", () => Store.setEntry(currentUser, topicIdAtRender, problemId, { notes: myTextarea.value }));
     }
 
     return card;
@@ -430,10 +494,12 @@
 
   function renderPatternView(pattern) {
     showSkeleton(5);
+    const topicAtRequest = currentTopicId;
     setTimeout(() => {
+      if (currentTopicId !== topicAtRequest) return;
       const stats = computeUserPatternStats(currentUser, pattern);
       const html = `
-        <a class="back-link" href="#home">&larr; All patterns</a>
+        <a class="back-link" href="#${currentTopicId}/home">&larr; All patterns</a>
         <div class="pattern-view-header" style="--pcolor:${pattern.color};--pcolor-soft:${hexToRgba(pattern.color, 0.14)}">
           <div class="icon-badge-lg">${ICONS[pattern.icon]}</div>
           <div>
@@ -455,7 +521,7 @@
         grid.appendChild(card);
       });
 
-      USERS.forEach((u) => applyProgressToPatternCards(u, progressByUser[u]));
+      USERS.forEach((u) => applyProgressToPatternCards(u, currentTopicId, progressByUser[u][currentTopicId] || {}));
       const pct = stats.total ? stats.solved / stats.total : 0;
       animateRing("pattern-header", pct, `${stats.solved}/${stats.total}`);
 
@@ -473,12 +539,14 @@
     }, 220);
   }
 
-  function applyProgressToPatternCards(user, data) {
-    progressByUser[user] = data || {};
+  function applyProgressToPatternCards(user, topicId, data) {
+    progressByUser[user][topicId] = data || {};
+    if (topicId !== currentTopicId) { updateSidebarProgress(); return; } // data for a background topic — store only
     if (currentRoute().view !== "pattern") { updateSidebarProgress(); updateHomeProgress(); return; }
+
     document.querySelectorAll(".problem-card").forEach((card) => {
       const problemId = card.dataset.problemId;
-      const entry = progressByUser[user][problemId] || {};
+      const entry = progressByUser[user][topicId][problemId] || {};
       if (user === currentUser) {
         card.querySelectorAll(".status-btn").forEach((btn) => { btn.dataset.active = String(btn.dataset.status === entry.status); });
         const ta = card.querySelector(`textarea.notes[data-user="${user}"]`);
@@ -497,7 +565,7 @@
     });
     updateSidebarProgress();
     const route = currentRoute();
-    const pattern = PATTERNS.find((p) => p.id === route.id);
+    const pattern = currentPatterns().find((p) => p.id === route.id);
     if (pattern) {
       const stats = computeUserPatternStats(currentUser, pattern);
       animateRing("pattern-header", stats.total ? stats.solved / stats.total : 0, `${stats.solved}/${stats.total}`);
@@ -508,10 +576,11 @@
     const q = document.getElementById("search-input").value.trim().toLowerCase();
     const diff = document.getElementById("difficulty-filter").value;
     const statusFilter = document.getElementById("status-filter").value;
+    const topicData = (progressByUser[currentUser] || {})[currentTopicId] || {};
     document.querySelectorAll(".problem-card").forEach((card) => {
       const matchesQuery = !q || card.dataset.name.includes(q);
       const matchesDiff = diff === "all" || card.dataset.difficulty === diff;
-      const entry = progressByUser[currentUser][card.dataset.problemId];
+      const entry = topicData[card.dataset.problemId];
       const matchesStatus =
         statusFilter === "all" ||
         (statusFilter === "none" && !(entry && entry.status)) ||
@@ -594,8 +663,10 @@
   // Boot the main app (after a name is chosen)
   // ============================================================
   function bootApp() {
+    const savedTopic = localStorage.getItem("dsa_last_topic");
+    currentTopicId = (savedTopic && topicEntry(savedTopic)) ? savedTopic : (topicEntry(DEFAULT_TOPIC) ? DEFAULT_TOPIC : topicIds()[0]);
+
     document.getElementById("sidebar-user-avatar").textContent = currentUser.charAt(0);
-    document.getElementById("mobile-title").textContent = TOPIC.title + " · Pattern Atlas";
     document.getElementById("mobile-avatar").textContent = currentUser.charAt(0);
 
     const userSelect = document.getElementById("user-switch");
@@ -616,11 +687,15 @@
 
     const isFirebase = Store.init();
     showSyncBanner(isFirebase);
-    Store.onLocalChange((u, data) => applyProgressToPatternCards(u, data));
-    USERS.forEach((u) => Store.subscribe(u, (uu, data) => applyProgressToPatternCards(uu, data)));
+    Store.onLocalChange((u, t, data) => applyProgressToPatternCards(u, t, data));
+    USERS.forEach((u) => {
+      topicIds().forEach((t) => {
+        Store.subscribe(u, t, (uu, tt, data) => applyProgressToPatternCards(uu, tt, data));
+      });
+    });
 
     window.addEventListener("hashchange", handleRoute);
-    if (!location.hash) location.hash = "#home";
+    if (!location.hash) navHome(currentTopicId);
     else handleRoute();
   }
 
@@ -653,7 +728,7 @@
     }
 
     handle.addEventListener("mousedown", (e) => {
-      if (window.innerWidth <= 860) return; // drawer mode on mobile, no resize
+      if (window.innerWidth <= 860) return;
       dragging = true;
       handle.classList.add("dragging");
       document.body.classList.add("resizing-sidebar");
