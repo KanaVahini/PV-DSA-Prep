@@ -587,7 +587,7 @@ return head;`,
   {
     id: "doubly-linked-list",
     name: "Doubly Linked List",
-    color: "#f26b9d",
+    color: "#e0895f",
     icon: "doubly-linked-list",
     trigger: "Anything where you need to walk backward too — DLL problems are usually 'the same array trick, but on a list that can go both directions'",
     summary: "A doubly linked list adds a `prev` pointer alongside `next`, so every node knows both its neighbors. That backward link is what makes tricks like two-pointer-from-both-ends possible on a list, not just an array.",
