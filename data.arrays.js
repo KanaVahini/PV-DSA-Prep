@@ -13,6 +13,193 @@ const TOPIC = {
 
 const PATTERNS = [
   {
+    id: "array-basics",
+    name: "Array Basics",
+    color: "#a8c94a",
+    icon: "array-basics",
+    trigger: "The most straightforward single-pass scans — biggest value, is it sorted, does a run of consecutive things exist",
+    summary: "Before any of the clever tricks, these are the questions that just want you to walk through the array once, tracking one or two things as you go. Simple, but worth having completely automatic.",
+    problems: [
+      {
+        name: "Largest Element in an Array",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/find-maximum-minimum-element-array/",
+        idea: "Walk through once, keeping track of the biggest value you've seen so far. Every new number either beats the current best (update it) or doesn't (ignore it) — there's no shortcut faster than looking at every element at least once.",
+        time: "O(n)", space: "O(1)",
+        code: `int largestElement(vector<int>& arr) {
+    int best = arr[0];
+    for (int x : arr) best = max(best, x);
+    return best;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Second Largest Element in an Array",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/second-largest-element-in-array/",
+        idea: "Sorting and picking index 1 works but does more work than needed. In a single pass, track both the largest and second-largest so far — whenever a new number beats the largest, the old largest slides down into second place before the new number takes over.",
+        time: "O(n)", space: "O(1)",
+        code: `int secondLargest(vector<int>& arr) {
+    int first = INT_MIN, second = INT_MIN;
+    for (int x : arr) {
+        if (x > first) { second = first; first = x; }
+        else if (x > second && x != first) second = x;
+    }
+    return second;
+}`,
+        variations: [],
+        gotchas: ["Watch out for duplicates of the largest value — `x != first` stops a repeated maximum from being mistaken for the second largest."]
+      },
+      {
+        name: "Linear Search",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/linear-search/",
+        idea: "Check each element one at a time until you find a match or run out of array. There's no faster general-purpose way to search an unsorted array — this is the baseline every other search technique (binary search, hashing) is trying to beat.",
+        time: "O(n)", space: "O(1)",
+        code: `int linearSearch(vector<int>& arr, int target) {
+    for (int i = 0; i < (int)arr.size(); i++)
+        if (arr[i] == target) return i;
+    return -1;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Check if the Array Is Sorted (and Rotated)",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/",
+        idea: "In a normal sorted array, every element is ≤ the one after it. A sorted-then-rotated array breaks that rule at exactly ONE point (the seam where it wraps around) — as long as that's the only break, and the last element isn't bigger than the first, it still counts as sorted-and-rotated. Count how many times the rule breaks; more than one break means it's neither sorted nor a valid rotation.",
+        time: "O(n)", space: "O(1)",
+        code: `bool checkSortedAndRotated(vector<int>& nums) {
+    int breaks = 0;
+    int n = nums.size();
+    for (int i = 0; i < n; i++) {
+        if (nums[i] > nums[(i + 1) % n]) breaks++;
+    }
+    return breaks <= 1;
+}`,
+        variations: [],
+        gotchas: ["Comparing the last element back to the first (using `% n`) is what correctly checks the 'wraparound seam' — don't just stop at the second-to-last element."]
+      },
+      {
+        name: "Maximum Consecutive Ones",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/max-consecutive-ones/",
+        idea: "Keep a running counter of the current streak of 1s, resetting it to zero the moment you hit a 0. Track the best streak seen so far as you go — no need for a window or two pointers, since a streak only ever grows one step at a time or resets completely.",
+        time: "O(n)", space: "O(1)",
+        code: `int findMaxConsecutiveOnes(vector<int>& nums) {
+    int streak = 0, best = 0;
+    for (int x : nums) {
+        streak = (x == 1) ? streak + 1 : 0;
+        best = max(best, streak);
+    }
+    return best;
+}`,
+        variations: ["Max Consecutive Ones III (allowed to flip up to k zeros — needs the sliding window pattern instead)"],
+        gotchas: []
+      }
+    ]
+  },
+  {
+    id: "in-place-manipulation",
+    name: "In-Place Array Rearrangement",
+    color: "#e857a0",
+    icon: "in-place-manipulation",
+    trigger: "Rewrite the array itself — remove/shift/rotate elements — without allocating a second array",
+    summary: "These all share one constraint: rearrange the array using only the space it already has. That usually means a read pointer and a write pointer moving through the array at different speeds.",
+    problems: [
+      {
+        name: "Remove Duplicates from Sorted Array",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/",
+        idea: "Because the array is sorted, every duplicate sits right next to its twin. Keep a 'write' pointer marking where the next unique value should go, and a 'read' pointer scanning ahead — whenever the read pointer finds a value different from what's at the write pointer, copy it forward and advance the write pointer.",
+        time: "O(n)", space: "O(1)",
+        code: `int removeDuplicates(vector<int>& nums) {
+    int write = 1;
+    for (int read = 1; read < (int)nums.size(); read++) {
+        if (nums[read] != nums[write - 1]) {
+            nums[write] = nums[read];
+            write++;
+        }
+    }
+    return write;
+}`,
+        variations: [],
+        gotchas: ["The array only needs to be modified up to the returned length — LeetCode ignores whatever's left after that, so don't worry about 'cleaning up' the tail."]
+      },
+      {
+        name: "Left Rotate the Array by One",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/array-rotation/",
+        idea: "Save the first element off to the side, shift every other element one position to the left, then drop the saved value into the now-empty last spot.",
+        time: "O(n)", space: "O(1)",
+        code: `void leftRotateByOne(vector<int>& arr) {
+    int first = arr[0];
+    for (int i = 0; i < (int)arr.size() - 1; i++) arr[i] = arr[i + 1];
+    arr[arr.size() - 1] = first;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Left Rotate the Array by K Places",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/rotate-array/",
+        idea: "Doing 'rotate by one' k times works but wastes time. The neat O(n) trick: reverse the first k elements, reverse the rest, then reverse the WHOLE array. Each reversal is simple, and the three of them combined land every element exactly where a k-rotation would put it.",
+        time: "O(n)", space: "O(1)",
+        code: `void leftRotate(vector<int>& nums, int k) {
+    int n = nums.size();
+    k %= n;
+    reverse(nums.begin(), nums.begin() + k);
+    reverse(nums.begin() + k, nums.end());
+    reverse(nums.begin(), nums.end());
+}`,
+        variations: [],
+        gotchas: ["Always reduce k with `k % n` first — rotating by the full length (or a multiple of it) is a no-op, and skipping this wastes unnecessary work."]
+      },
+      {
+        name: "Move Zeroes",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/move-zeroes/",
+        idea: "Same read/write pointer idea as removing duplicates. The write pointer marks where the next non-zero value should land; scan through with the read pointer, and every time you find a non-zero, swap it into the write pointer's spot and advance. Zeroes naturally get pushed toward the end as a side effect.",
+        time: "O(n)", space: "O(1)",
+        code: `void moveZeroes(vector<int>& nums) {
+    int write = 0;
+    for (int read = 0; read < (int)nums.size(); read++) {
+        if (nums[read] != 0) {
+            swap(nums[write], nums[read]);
+            write++;
+        }
+    }
+}`,
+        variations: [],
+        gotchas: ["Swapping (not just overwriting) is what keeps the non-zero elements in their original relative order while pushing zeroes back."]
+      },
+      {
+        name: "Union of Two Sorted Arrays",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/union-of-two-sorted-arrays/",
+        idea: "This is the merge step of merge sort, with one twist: skip duplicates. Walk two pointers through both sorted arrays at once, always taking the smaller of the two current values — and only add it to the result if it's different from the last value you added.",
+        time: "O(m+n)", space: "O(m+n) for the result",
+        code: `vector<int> unionArray(vector<int>& a, vector<int>& b) {
+    vector<int> result;
+    int i = 0, j = 0;
+    while (i < (int)a.size() && j < (int)b.size()) {
+        int smaller = (a[i] <= b[j]) ? a[i] : b[j];
+        if (result.empty() || result.back() != smaller) result.push_back(smaller);
+        (a[i] <= b[j]) ? i++ : j++;
+    }
+    while (i < (int)a.size()) { if (result.empty() || result.back() != a[i]) result.push_back(a[i]); i++; }
+    while (j < (int)b.size()) { if (result.empty() || result.back() != b[j]) result.push_back(b[j]); j++; }
+    return result;
+}`,
+        variations: [],
+        gotchas: ["Don't forget the two cleanup loops at the end — once one array runs out, the other one's remaining elements still need to be merged in."]
+      }
+    ]
+  },
+  {
     id: "two-pointers",
     name: "Two Pointers",
     color: "#5b8def",
@@ -64,6 +251,38 @@ const PATTERNS = [
 }`,
         variations: ["3Sum Closest", "4Sum (one more fixed loop)"],
         gotchas: ["Skipping repeated numbers is the part people forget — do it for all three positions, not just the first."]
+      },
+      {
+        name: "4Sum",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/4sum/",
+        idea: "Same trick as 3Sum, just with one more layer: fix TWO numbers with nested loops instead of one, then run the two-pointer sweep on whatever's left. The extra fixed loop is what pushes the time complexity up a notch, but the core technique — sort, fix, two-pointer — doesn't change at all.",
+        time: "O(n³)", space: "O(1) extra (excl. output)",
+        code: `vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    vector<vector<int>> res;
+    for (int i = 0; i < n - 3; i++) {
+        if (i > 0 && nums[i] == nums[i-1]) continue;
+        for (int j = i + 1; j < n - 2; j++) {
+            if (j > i + 1 && nums[j] == nums[j-1]) continue;
+            int l = j + 1, r = n - 1;
+            while (l < r) {
+                long sum = (long)nums[i] + nums[j] + nums[l] + nums[r];
+                if (sum == target) {
+                    res.push_back({nums[i], nums[j], nums[l], nums[r]});
+                    l++; r--;
+                    while (l < r && nums[l] == nums[l-1]) l++;
+                    while (l < r && nums[r] == nums[r+1]) r--;
+                } else if (sum < target) l++;
+                else r--;
+            }
+        }
+    }
+    return res;
+}`,
+        variations: [],
+        gotchas: ["Use a wider type (like `long`) for the running sum — four `int`s added together can overflow a 32-bit int on the boundary test cases."]
       },
       {
         name: "Container With Most Water",
@@ -226,6 +445,24 @@ const PATTERNS = [
 }`,
         variations: [],
         gotchas: ["This is the exact same shape as the 'at most K distinct characters' problem above — just spot the pattern, not the story."]
+      },
+      {
+        name: "Longest Subarray with Sum K (positives only)",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/longest-sub-array-sum-k/",
+        idea: "Because every number is positive, growing the window can only ever increase the sum, and shrinking it can only ever decrease it — the sum moves in one predictable direction. That predictability is exactly what a sliding window needs: grow the window while the sum is too small, shrink it while the sum is too big, and record the window length whenever the sum matches exactly.",
+        time: "O(n)", space: "O(1)",
+        code: `int longestSubarraySumK(vector<int>& arr, int k) {
+    int l = 0, sum = 0, best = 0;
+    for (int r = 0; r < (int)arr.size(); r++) {
+        sum += arr[r];
+        while (sum > k) sum -= arr[l++];
+        if (sum == k) best = max(best, r - l + 1);
+    }
+    return best;
+}`,
+        variations: ["Longest Subarray with Sum K (negatives allowed) — the sliding window trick breaks once negatives are involved, since shrinking no longer guarantees the sum goes down; that variant needs the prefix-sum + hashmap pattern instead"],
+        gotchas: ["This exact approach silently gives wrong answers the moment the array can contain negative numbers — always check the constraints before reaching for a sliding window."]
       }
     ]
   },
@@ -314,6 +551,89 @@ public:
 }`,
         variations: [],
         gotchas: []
+      },
+      {
+        name: "Longest Subarray with Sum K (negatives allowed)",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/longest-sub-array-sum-k/",
+        idea: "A stretch summing to k means: (running total now) minus (running total earlier) equals k — so (running total earlier) equals (running total now) minus k. As you scan, keep a hashmap of the FIRST index each running total was ever seen at. If (current total - k) has been seen before, the stretch from just after that first occurrence to right here sums to k — and using the first occurrence (not just any occurrence) is what guarantees you get the LONGEST such stretch.",
+        time: "O(n)", space: "O(n)",
+        code: `int longestSubarraySumK(vector<int>& arr, int k) {
+    unordered_map<int,int> firstSeen; // prefix sum -> earliest index it was seen at
+    long sum = 0;
+    int best = 0;
+    for (int i = 0; i < (int)arr.size(); i++) {
+        sum += arr[i];
+        if (sum == k) best = max(best, i + 1);
+        if (firstSeen.count(sum - k)) best = max(best, i - firstSeen[sum - k]);
+        if (!firstSeen.count(sum)) firstSeen[sum] = i;
+    }
+    return best;
+}`,
+        variations: ["If all values are guaranteed positive, the sliding window version is simpler and uses O(1) space instead."],
+        gotchas: ["Only store the FIRST time each prefix sum appears — overwriting it with a later index would shrink the window instead of maximizing it."]
+      },
+      {
+        name: "Largest Subarray with Sum 0",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/largest-subarray-with-0-sum/",
+        idea: "This is the k=0 special case of the problem above: a subarray sums to zero exactly when the running total repeats a value it's had before. Track the first index each running total appears at; any time you see a repeat, the stretch in between sums to zero.",
+        time: "O(n)", space: "O(n)",
+        code: `int maxLenZeroSum(vector<int>& arr) {
+    unordered_map<int,int> firstSeen;
+    firstSeen[0] = -1; // sum of 0 "seen" before the array even starts
+    long sum = 0;
+    int best = 0;
+    for (int i = 0; i < (int)arr.size(); i++) {
+        sum += arr[i];
+        if (firstSeen.count(sum)) best = max(best, i - firstSeen[sum]);
+        else firstSeen[sum] = i;
+    }
+    return best;
+}`,
+        variations: [],
+        gotchas: ["Seed the map with `{0: -1}` — that accounts for a zero-sum subarray that starts right at index 0."]
+      },
+      {
+        name: "Count Subarrays with Given XOR K",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/count-subarrays-given-xor-k/",
+        idea: "This is 'Subarray Sum Equals K', but every '+' is replaced with 'XOR'. A subarray XORs to k exactly when (running XOR now) XOR (running XOR earlier) equals k — which rearranges to (running XOR earlier) equals (running XOR now) XOR k, since XOR undoes itself. Keep a hashmap counting how many times each running XOR value has appeared, and add to your count whenever (current XOR) XOR k has been seen before.",
+        time: "O(n)", space: "O(n)",
+        code: `int countSubarraysXorK(vector<int>& arr, int k) {
+    unordered_map<int,int> freq;
+    freq[0] = 1;
+    int xorSum = 0, count = 0;
+    for (int x : arr) {
+        xorSum ^= x;
+        if (freq.count(xorSum ^ k)) count += freq[xorSum ^ k];
+        freq[xorSum]++;
+    }
+    return count;
+}`,
+        variations: [],
+        gotchas: ["Seed the map with `{0: 1}` just like Subarray Sum Equals K — it accounts for a subarray starting at index 0 whose XOR already equals k."]
+      },
+      {
+        name: "Leaders in an Array",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/leaders-in-an-array/",
+        idea: "A 'leader' is an element that's bigger than everything to its right. Instead of checking every element against everything after it, scan from the RIGHT end, keeping a running maximum — any element that beats the running maximum-so-far is a leader, since by definition nothing after it (which you've already scanned) is bigger.",
+        time: "O(n)", space: "O(1) extra (excl. output)",
+        code: `vector<int> leaders(vector<int>& arr) {
+    vector<int> result;
+    int maxFromRight = INT_MIN;
+    for (int i = arr.size() - 1; i >= 0; i--) {
+        if (arr[i] > maxFromRight) {
+            result.push_back(arr[i]);
+            maxFromRight = arr[i];
+        }
+    }
+    reverse(result.begin(), result.end()); // restore original left-to-right order
+    return result;
+}`,
+        variations: [],
+        gotchas: ["The rightmost element is always a leader by definition (nothing after it to beat it) — a right-to-left scan naturally handles this without a special case."]
       }
     ]
   },
@@ -374,6 +694,42 @@ public:
 // otherwise: answer = max(maxKadane, total - minKadane)`,
         variations: [],
         gotchas: ["If every number is negative, the 'total minus minimum' trick breaks (it gives an empty array) — handle that case separately."]
+      },
+      {
+        name: "Best Time to Buy and Sell Stock",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+        idea: "This has the same spirit as Kadane's — track the best-so-far as you scan once. Keep a running minimum price seen so far (the cheapest day to have bought), and at every day, check what profit you'd make selling today against that running minimum. There's no need to check every buy/sell pair — the best buy day is always just the lowest price you've seen up to today.",
+        time: "O(n)", space: "O(1)",
+        code: `int maxProfit(vector<int>& prices) {
+    int minPrice = INT_MAX, best = 0;
+    for (int p : prices) {
+        minPrice = min(minPrice, p);
+        best = max(best, p - minPrice);
+    }
+    return best;
+}`,
+        variations: [],
+        gotchas: ["Update `minPrice` before computing the profit for the current day — you can't sell and buy on the same day in this version of the problem."]
+      },
+      {
+        name: "Print Subarray with Maximum Sum",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/find-subarray-with-given-sum-in-array-set-1-nonnegative-numbers/",
+        idea: "Same running logic as Kadane's, but now you also need to remember WHERE the best subarray started and ended, not just its sum. Track a tentative start index that resets every time you restart the running sum from scratch, and whenever the running sum beats the best-so-far, snapshot the current start and end as the new answer.",
+        time: "O(n)", space: "O(1) extra (excl. output)",
+        code: `vector<int> maxSumSubarrayIndices(vector<int>& arr) {
+    int cur = arr[0], best = arr[0];
+    int tentativeStart = 0, bestStart = 0, bestEnd = 0;
+    for (int i = 1; i < (int)arr.size(); i++) {
+        if (arr[i] > cur + arr[i]) { cur = arr[i]; tentativeStart = i; }
+        else cur = cur + arr[i];
+        if (cur > best) { best = cur; bestStart = tentativeStart; bestEnd = i; }
+    }
+    return {bestStart, bestEnd, best};
+}`,
+        variations: [],
+        gotchas: ["The tentative start only updates when you actually restart the running sum — don't move it on every iteration, or you'll lose track of where the best stretch really began."]
       }
     ]
   },
@@ -565,6 +921,31 @@ public:
 }`,
         variations: [],
         gotchas: []
+      },
+      {
+        name: "Majority Element II",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/majority-element-ii/",
+        idea: "At most TWO numbers can appear more than n/3 times (three such numbers would need over n elements total, which doesn't fit). So extend the Boyer-Moore voting trick from regular Majority Element to track two candidates and two counts at once, each candidate cancelling out against anything that isn't itself or the other candidate. A final verification pass confirms both candidates actually appear more than n/3 times, since the voting process can produce false positives if no such majority actually exists.",
+        time: "O(n)", space: "O(1)",
+        code: `vector<int> majorityElementII(vector<int>& nums) {
+    int cand1 = 0, cand2 = 1, count1 = 0, count2 = 0; // cand1 != cand2 initially
+    for (int x : nums) {
+        if (x == cand1) count1++;
+        else if (x == cand2) count2++;
+        else if (count1 == 0) { cand1 = x; count1 = 1; }
+        else if (count2 == 0) { cand2 = x; count2 = 1; }
+        else { count1--; count2--; }
+    }
+    count1 = count2 = 0;
+    for (int x : nums) { if (x == cand1) count1++; else if (x == cand2) count2++; }
+    vector<int> res;
+    if (count1 > (int)nums.size() / 3) res.push_back(cand1);
+    if (count2 > (int)nums.size() / 3) res.push_back(cand2);
+    return res;
+}`,
+        variations: [],
+        gotchas: ["The verification pass at the end is mandatory here — unlike the n/2 version, the problem doesn't guarantee a valid answer exists, so the voting phase alone can hand you a wrong candidate."]
       }
     ]
   },
@@ -634,6 +1015,27 @@ public:
 }`,
         variations: [],
         gotchas: ["This is the trickiest of the three — if you can figure this out on your own after doing Missing Number, you've really got the pattern."]
+      },
+      {
+        name: "Find the Repeating and Missing Number",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/find-a-repeating-and-a-missing-number/",
+        idea: "This is Missing Number and Find All Duplicates happening at the same time, in an array of size n containing values 1..n. Run the same cyclic-sort swap-into-home-position trick; the one spot that ends up NOT holding its correct value reveals both answers at once — the value sitting there is the repeat, and the value that should be there (its position + 1) is the one that's missing.",
+        time: "O(n)", space: "O(1)",
+        code: `pair<int,int> findRepeatingAndMissing(vector<int>& arr) {
+    int n = arr.size(), i = 0;
+    while (i < n) {
+        int correct = arr[i] - 1;
+        if (arr[i] != arr[correct]) swap(arr[i], arr[correct]);
+        else i++;
+    }
+    for (i = 0; i < n; i++) {
+        if (arr[i] != i + 1) return {arr[i], i + 1}; // {repeating, missing}
+    }
+    return {-1, -1};
+}`,
+        variations: ["There's also a pure-math approach using the sum and sum-of-squares of 1..n to solve two equations for the two unknowns — same result, no array mutation needed."],
+        gotchas: []
       }
     ]
   },
@@ -1055,6 +1457,96 @@ int findKthLargest(vector<int>& nums, int k) {
 }`,
         variations: ["Top K Frequent Elements (bucket sort by frequency runs in O(n))"],
         gotchas: ["Being able to explain all three options (sort / heap / quickselect) and their trade-offs is usually what interviewers want."]
+      },
+      {
+        name: "Merge Two Sorted Arrays Without Extra Space",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/merge-two-sorted-arrays/",
+        idea: "Unlike the LeetCode version, here neither array has spare room at the end to merge into — both are genuinely full and separate. The 'gap method' (based on an idea from Shell sort) handles this: start with a gap roughly half the combined length, and compare elements that far apart across BOTH arrays as if they were one, swapping if out of order. Shrink the gap each round (roughly halving it) until the gap reaches 1 and everything's settled into place.",
+        time: "O((m+n) log(m+n))", space: "O(1)",
+        code: `void mergeNoExtraSpace(vector<int>& a, vector<int>& b) {
+    int n = a.size(), m = b.size();
+    int gap = ceil((n + m) / 2.0);
+    while (gap > 0) {
+        int i = 0, j = gap;
+        while (j < n + m) {
+            int vi = (i < n) ? a[i] : b[i - n];
+            int vj = (j < n) ? a[j] : b[j - n];
+            if (vi > vj) {
+                if (i < n && j < n) swap(a[i], a[j]);
+                else if (i < n && j >= n) swap(a[i], b[j - n]);
+                else swap(b[i - n], b[j - n]);
+            }
+            i++; j++;
+        }
+        if (gap == 1) break;
+        gap = ceil(gap / 2.0);
+    }
+}`,
+        variations: [],
+        gotchas: ["Treating the two arrays as one continuous virtual array (using index math to figure out which real array a position falls into) is the trickiest part to get right — draw it out on paper first."]
+      },
+      {
+        name: "Count Inversions",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/counting-inversions/",
+        idea: "An inversion is a pair where a bigger number comes before a smaller one. Checking every pair is O(n²); instead, piggyback on merge sort. While merging two already-sorted halves, any time you take an element from the RIGHT half before you've finished the LEFT half, every remaining element in the left half forms an inversion with it — count all of those at once instead of one at a time.",
+        time: "O(n log n)", space: "O(n)",
+        code: `long merge(vector<int>& arr, int l, int mid, int r) {
+    vector<int> temp;
+    int i = l, j = mid + 1;
+    long inversions = 0;
+    while (i <= mid && j <= r) {
+        if (arr[i] <= arr[j]) temp.push_back(arr[i++]);
+        else { temp.push_back(arr[j++]); inversions += (mid - i + 1); }
+    }
+    while (i <= mid) temp.push_back(arr[i++]);
+    while (j <= r) temp.push_back(arr[j++]);
+    for (int k = l; k <= r; k++) arr[k] = temp[k - l];
+    return inversions;
+}
+long countInversions(vector<int>& arr, int l, int r) {
+    if (l >= r) return 0;
+    int mid = (l + r) / 2;
+    long count = countInversions(arr, l, mid) + countInversions(arr, mid + 1, r);
+    count += merge(arr, l, mid, r);
+    return count;
+}`,
+        variations: ["Reverse Pairs (same merge-sort skeleton, different condition for counting)"],
+        gotchas: ["The `(mid - i + 1)` line is the whole trick — it's counting a whole batch of inversions in one step instead of looping through them individually."]
+      },
+      {
+        name: "Reverse Pairs",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/reverse-pairs/",
+        idea: "A reverse pair is a stricter version of an inversion: `arr[i] > 2 * arr[j]` for i < j. Same merge-sort skeleton as Count Inversions, but the counting step needs its own separate pass with a separate pointer, since the '2×' condition doesn't shrink and grow in sync with the normal merge comparison the way plain inversions do.",
+        time: "O(n log n)", space: "O(n)",
+        code: `int countAcross(vector<int>& arr, int l, int mid, int r) {
+    int count = 0, j = mid + 1;
+    for (int i = l; i <= mid; i++) {
+        while (j <= r && arr[i] > 2LL * arr[j]) j++;
+        count += (j - (mid + 1));
+    }
+    return count;
+}
+void merge(vector<int>& arr, int l, int mid, int r) {
+    vector<int> temp;
+    int i = l, j = mid + 1;
+    while (i <= mid && j <= r) temp.push_back(arr[i] <= arr[j] ? arr[i++] : arr[j++]);
+    while (i <= mid) temp.push_back(arr[i++]);
+    while (j <= r) temp.push_back(arr[j++]);
+    for (int k = l; k <= r; k++) arr[k] = temp[k - l];
+}
+int reversePairs(vector<int>& arr, int l, int r) {
+    if (l >= r) return 0;
+    int mid = (l + r) / 2;
+    int count = reversePairs(arr, l, mid) + reversePairs(arr, mid + 1, r);
+    count += countAcross(arr, l, mid, r);
+    merge(arr, l, mid, r);
+    return count;
+}`,
+        variations: [],
+        gotchas: ["Count the reverse pairs BEFORE merging the two halves — merging reorders elements, which would break the left/right split the counting step depends on."]
       }
     ]
   },
@@ -1114,11 +1606,79 @@ int findKthLargest(vector<int>& nums, int k) {
         gotchas: []
       }
     ]
+  },
+
+  {
+    id: "construction-rearrangement",
+    name: "Array Construction & Rearrangement",
+    color: "#57c2e8",
+    icon: "construction-rearrangement",
+    trigger: "Build the array according to a specific rule, or rearrange it into a very particular target shape — not just sort it",
+    summary: "These don't fit the usual 'scan and track a value' mold — each one follows its own specific construction or rearrangement rule that you mostly just need to have seen before.",
+    problems: [
+      {
+        name: "Pascal's Triangle I",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/pascals-triangle/",
+        idea: "Every entry is the sum of the two entries diagonally above it in the previous row — except the edges of each row, which are always 1. Build row by row: start each new row with a 1, fill the middle by adding pairs from the row before it, and end with a 1.",
+        time: "O(n²) total across all rows", space: "O(n²) for the output",
+        code: `vector<vector<int>> generate(int numRows) {
+    vector<vector<int>> triangle;
+    for (int i = 0; i < numRows; i++) {
+        vector<int> row(i + 1, 1);
+        for (int j = 1; j < i; j++) row[j] = triangle[i-1][j-1] + triangle[i-1][j];
+        triangle.push_back(row);
+    }
+    return triangle;
+}`,
+        variations: ["Pascal's Triangle II (just return a single row — can be done with O(k) space using the nCr formula)"],
+        gotchas: []
+      },
+      {
+        name: "Next Permutation",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/next-permutation/",
+        idea: "To find the next lexicographically bigger arrangement, you want to change the array as little as possible, and as far to the right as possible. Scan from the right to find the first spot where the sequence stops being non-increasing (the 'break point') — that element needs to grow. Swap it with the smallest element to its right that's still bigger than it, then reverse everything after the break point to put it in the smallest possible order.",
+        time: "O(n)", space: "O(1)",
+        code: `void nextPermutation(vector<int>& nums) {
+    int n = nums.size(), i = n - 2;
+    while (i >= 0 && nums[i] >= nums[i + 1]) i--; // find the break point
+    if (i >= 0) {
+        int j = n - 1;
+        while (nums[j] <= nums[i]) j--; // find the smallest element bigger than nums[i]
+        swap(nums[i], nums[j]);
+    }
+    reverse(nums.begin() + i + 1, nums.end()); // put the tail in ascending order
+}`,
+        variations: [],
+        gotchas: ["If no break point exists (the whole array is non-increasing), the array is already the highest permutation — reversing the whole thing correctly wraps around to the lowest one."]
+      },
+      {
+        name: "Rearrange Array Elements by Sign",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/rearrange-array-elements-by-sign/",
+        idea: "The array has an equal number of positive and negative numbers, and needs to alternate positive-negative-positive-negative while keeping each group's original relative order. Walk through once, placing each positive number into the next even slot (0, 2, 4...) and each negative number into the next odd slot (1, 3, 5...) of a new result array.",
+        time: "O(n)", space: "O(n)",
+        code: `vector<int> rearrangeArray(vector<int>& nums) {
+    vector<int> res(nums.size());
+    int posIdx = 0, negIdx = 1;
+    for (int x : nums) {
+        if (x > 0) { res[posIdx] = x; posIdx += 2; }
+        else { res[negIdx] = x; negIdx += 2; }
+    }
+    return res;
+}`,
+        variations: [],
+        gotchas: ["This assumes an equal split of positives and negatives (as the problem guarantees) — an unequal split needs a different approach for the leftover elements."]
+      }
+    ]
   }
 ];
 
 // Quick-reference: keyword → pattern, used by the pattern finder
 const TRIGGER_TABLE = [
+  { keyword: "Basic scans — largest value, is it sorted, linear search", pattern: "array-basics" },
+  { keyword: "Rearranging the array itself, no extra array allowed", pattern: "in-place-manipulation" },
   { keyword: "Sorted array + finding a pair", pattern: "two-pointers" },
   { keyword: "Contiguous stretch of numbers, with some limit or rule", pattern: "sliding-window" },
   { keyword: "Asked the sum of a range, over and over", pattern: "prefix-sum" },
@@ -1133,7 +1693,8 @@ const TRIGGER_TABLE = [
   { keyword: "\"Next bigger/smaller number\"", pattern: "monotonic-stack" },
   { keyword: "\"Fewest jumps\" or \"can you reach the end\"", pattern: "greedy" },
   { keyword: "Sorting it first makes everything easy", pattern: "sorting-tricks" },
-  { keyword: "\"Find the one number that's different\", no extra memory", pattern: "bit-manipulation" }
+  { keyword: "\"Find the one number that's different\", no extra memory", pattern: "bit-manipulation" },
+  { keyword: "Build or rearrange the array into a specific target shape", pattern: "construction-rearrangement" }
 ];
 
   window.TOPIC_REGISTRY = window.TOPIC_REGISTRY || {};

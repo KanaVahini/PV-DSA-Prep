@@ -37,6 +37,8 @@
   const ICONS = {
     home: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.5V20h5v-6h2v6h5v-9.5"/></svg>`,
     // Arrays
+    "array-basics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V14M9 20V6M14 20V11M19 20V16"/><circle cx="9" cy="6" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+    "in-place-manipulation": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.7V12a9 9 0 0 1 9-9c2.4 0 4.5.9 6.1 2.4M7 21.9l-4-4 4-4"/><path d="M21 11.3V12a9 9 0 0 1-9 9c-2.4 0-4.5-.9-6.1-2.4"/></svg>`,
     "two-pointers": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h6M21 12h-6"/><path d="M9 8l-6 4 6 4M15 8l6 4-6 4"/></svg>`,
     "sliding-window": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="1.5"/><rect x="8" y="7" width="6" height="10" fill="currentColor" opacity="0.3" stroke="none"/></svg>`,
     "prefix-sum": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h13l-6.5 8L18 20H5"/></svg>`,
@@ -50,6 +52,7 @@
     greedy: `<svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>`,
     "sorting-tricks": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4 4 7M7 4l3 3"/><path d="M17 20V4M17 20l-3-3M17 20l3-3"/></svg>`,
     "bit-manipulation": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" rx="1"/><rect x="15" y="9" width="6" height="6" rx="1" fill="currentColor"/></svg>`,
+    "construction-rearrangement": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor" opacity="0.3"/></svg>`,
     // Linked List
     "ll-basics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4" cy="12" r="2.3"/><path d="M6.3 12h4.4"/><circle cx="12" cy="12" r="2.3"/><path d="M14.3 12h4.4"/><circle cx="20" cy="12" r="2.3" fill="currentColor" stroke="none"/></svg>`,
     "fast-slow-pointers": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="4" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.9" cy="15" r="1.7" fill="currentColor" stroke="none"/></svg>`,
