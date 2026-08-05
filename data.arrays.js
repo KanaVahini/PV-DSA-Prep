@@ -739,8 +739,8 @@ public:
     name: "Binary Search on Arrays",
     color: "#4fb0e0",
     icon: "binary-search",
-    trigger: "Sorted (or rotated-sorted) array · \"find it fast\" · \"find the smallest/largest value that still works\" (binary search on the answer)",
-    summary: "Cut the search space in half every time. Also works beyond just finding a number — it can find the best value that satisfies some condition.",
+    trigger: "Sorted (or rotated-sorted) array · \"find it fast\" · find a boundary, a range, or a specific rotation property",
+    summary: "Cut the search space in half every time. Most of these are variations on the same skeleton — what changes is the exact condition you're narrowing in on.",
     problems: [
       {
         name: "Binary Search (classic)",
@@ -757,8 +757,81 @@ public:
     }
     return -1;
 }`,
-        variations: ["Finding the first or last position of a value in a sorted array"],
+        variations: [],
         gotchas: ["Writing `l + (r-l)/2` instead of `(l+r)/2` avoids an integer overflow bug when l and r are both large — good habit to default to."]
+      },
+      {
+        name: "Lower Bound & Upper Bound",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/implement-lower-bound/",
+        idea: "'Lower bound' means the first index where a value >= target could be inserted without breaking the sort order; 'upper bound' is the same but for > target. Both are just classic binary search with the comparison flipped — instead of stopping when you find an exact match, keep narrowing and remember the best candidate every time the condition holds, continuing to search left for an even better one.",
+        time: "O(log n)", space: "O(1)",
+        code: `int lowerBound(vector<int>& arr, int target) {
+    int l = 0, r = arr.size(), ans = arr.size();
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (arr[m] >= target) { ans = m; r = m; }
+        else l = m + 1;
+    }
+    return ans;
+}
+int upperBound(vector<int>& arr, int target) {
+    int l = 0, r = arr.size(), ans = arr.size();
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (arr[m] > target) { ans = m; r = m; }
+        else l = m + 1;
+    }
+    return ans;
+}`,
+        variations: ["Search Insert Position (exactly the lower bound of the target)"],
+        gotchas: ["These almost always underpin the trickier binary search problems below — get comfortable with this exact skeleton before moving on."]
+      },
+      {
+        name: "Floor and Ceil in a Sorted Array",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/find-floor-and-ceil-of-a-sorted-array/",
+        idea: "The floor is the largest value <= target, the ceil is the smallest value >= target. Ceil is just the lower bound directly. Floor is one step to the left of the upper bound of (target - 1) — or more simply, track the last index where `arr[mid] <= target` held true while binary searching, same skeleton as before with the direction flipped.",
+        time: "O(log n)", space: "O(1)",
+        code: `int findFloor(vector<int>& arr, int target) {
+    int l = 0, r = arr.size() - 1, ans = -1;
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        if (arr[m] <= target) { ans = arr[m]; l = m + 1; }
+        else r = m - 1;
+    }
+    return ans;
+}
+int findCeil(vector<int>& arr, int target) {
+    int l = 0, r = arr.size() - 1, ans = -1;
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        if (arr[m] >= target) { ans = arr[m]; r = m - 1; }
+        else l = m + 1;
+    }
+    return ans;
+}`,
+        variations: [],
+        gotchas: ["Neither may exist (target smaller than everything, or bigger than everything) — decide upfront what your function should return in that case, usually -1."]
+      },
+      {
+        name: "First and Last Occurrence in a Sorted Array",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+        idea: "The first occurrence of a value is exactly its lower bound; the last occurrence is one position before the upper bound. Run both binary searches — no need for anything fancier, and the count of occurrences is just `last - first + 1` once you have both.",
+        time: "O(log n)", space: "O(1)",
+        code: `vector<int> searchRange(vector<int>& nums, int target) {
+    int n = nums.size();
+    int l = 0, r = n, first = -1;
+    while (l < r) { int m = l + (r-l)/2; if (nums[m] >= target) r = m; else l = m + 1; }
+    if (l < n && nums[l] == target) first = l;
+    if (first == -1) return {-1, -1};
+    l = 0; r = n;
+    while (l < r) { int m = l + (r-l)/2; if (nums[m] > target) r = m; else l = m + 1; }
+    return {first, l - 1};
+}`,
+        variations: ["Count Occurrences in a Sorted Array (just `last - first + 1` once you have both)"],
+        gotchas: ["Check that the lower-bound position actually contains the target before treating it as a match — the target might not be in the array at all."]
       },
       {
         name: "Search in Rotated Sorted Array",
@@ -779,14 +852,37 @@ public:
     }
     return -1;
 }`,
-        variations: ["Same problem but with duplicate numbers allowed", "Find the smallest number in a rotated sorted array"],
-        gotchas: ["If there are duplicate numbers at both ends, you sometimes can't tell which half is sorted — just shrink both ends by one and try again."]
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Search in Rotated Sorted Array II (with duplicates)",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/",
+        idea: "Same 'figure out which half is sorted' trick as before, but duplicates can make `nums[l] == nums[m] == nums[r]` true even when the array isn't fully sorted on either side — in that one edge case, you genuinely can't tell which half is sorted. The fix: just shrink both ends inward by one and try again, giving up the guaranteed O(log n) time in the worst case (all duplicates) in exchange for correctness.",
+        time: "O(log n) average, O(n) worst case with many duplicates", space: "O(1)",
+        code: `bool search(vector<int>& nums, int target) {
+    int l = 0, r = nums.size() - 1;
+    while (l <= r) {
+        int m = (l + r) >> 1;
+        if (nums[m] == target) return true;
+        if (nums[l] == nums[m] && nums[m] == nums[r]) { l++; r--; continue; }
+        if (nums[l] <= nums[m]) {
+            if (nums[l] <= target && target < nums[m]) r = m - 1; else l = m + 1;
+        } else {
+            if (nums[m] < target && target <= nums[r]) l = m + 1; else r = m - 1;
+        }
+    }
+    return false;
+}`,
+        variations: [],
+        gotchas: ["This is exactly why the follow-up to 'Search in Rotated Sorted Array' asks about duplicates — it breaks the clean O(log n) guarantee of the original."]
       },
       {
         name: "Find Minimum in Rotated Sorted Array",
         difficulty: "Medium",
         link: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
-        idea: "The smallest number is sitting exactly where the sorted order 'breaks'. Compare the middle number to the rightmost one: if the middle is bigger, the break (and the minimum) must be somewhere to its right. Otherwise, the minimum is the middle number itself or somewhere to its left.",
+        idea: "The smallest number is sitting exactly where the sorted order 'breaks'. Compare the middle number to the rightmost one: if the middle is bigger, the break (and the minimum) must be somewhere to its right. Otherwise, the minimum is the middle number itself or somewhere to its left. The number of rotations the array has undergone is just the INDEX of this minimum.",
         time: "O(log n)", space: "O(1)",
         code: `int findMin(vector<int>& nums) {
     int l = 0, r = nums.size() - 1;
@@ -796,14 +892,206 @@ public:
     }
     return nums[l];
 }`,
-        variations: [],
+        variations: ["How many times was the array rotated? (same code — just return the index `l` instead of `nums[l]`)"],
         gotchas: []
       },
       {
-        name: "Koko Eating Bananas (binary search on the answer)",
+        name: "Single Element in a Sorted Array",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/single-element-in-a-sorted-array/",
+        idea: "Every element appears twice except one, and the array is sorted — so before the lone element, pairs start at EVEN indices; after it, pairs start at ODD indices. Binary search on that shift: check the even index at your midpoint — if its pair matches what should follow, the lone element is still ahead of you; otherwise it's at or behind you.",
+        time: "O(log n)", space: "O(1)",
+        code: `int singleNonDuplicate(vector<int>& nums) {
+    int l = 0, r = nums.size() - 1;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (m % 2 == 1) m--; // force m to be even
+        if (nums[m] == nums[m + 1]) l = m + 2; // pair intact, single element is later
+        else r = m; // pair broken, single element is here or earlier
+    }
+    return nums[l];
+}`,
+        variations: [],
+        gotchas: ["Forcing `m` to always land on an even index is what keeps the 'pair starts at even index' rule consistent throughout the search."]
+      },
+      {
+        name: "Find Peak Element",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/find-peak-element/",
+        idea: "A peak is just any element bigger than both its neighbors (treating the array's edges as bordered by -infinity). At any midpoint, look at the slope: if it's going uphill (`nums[m] < nums[m+1]`), a peak must exist somewhere to the right; if it's going downhill, a peak must exist at or to the left. You don't need the array to be sorted at all — just keep climbing toward higher ground.",
+        time: "O(log n)", space: "O(1)",
+        code: `int findPeakElement(vector<int>& nums) {
+    int l = 0, r = nums.size() - 1;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (nums[m] < nums[m + 1]) l = m + 1;
+        else r = m;
+    }
+    return l;
+}`,
+        variations: [],
+        gotchas: ["This works on completely unsorted arrays — the only rule binary search needs here is 'no two adjacent elements are equal', which the problem guarantees."]
+      }
+    ]
+  },
+
+  {
+    id: "binary-search-2d",
+    name: "Binary Search on 2D Arrays",
+    color: "#3fa9e0",
+    icon: "binary-search-2d",
+    trigger: "A grid where rows or columns are sorted — search for a value, a peak, or a statistical property like the median",
+    summary: "The 2D versions add one extra layer: usually binary searching over rows/columns, or over the grid's value range, with an O(rows) or O(cols) check at every step instead of an O(1) one.",
+    problems: [
+      {
+        name: "Row with Maximum Number of 1s",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/find-the-row-with-maximum-number-of-1s/",
+        idea: "If every row is sorted (all 0s before all 1s), the count of 1s in a row is just `row length - (index of the first 1)` — and finding the first 1 in a sorted row of 0s/1s is exactly the lower-bound trick. Binary search each row for its first 1, and track whichever row has the most.",
+        time: "O(rows * log cols)", space: "O(1)",
+        code: `int rowWithMax1s(vector<vector<int>>& mat) {
+    int bestRow = -1, bestCount = 0;
+    for (int i = 0; i < (int)mat.size(); i++) {
+        int l = 0, r = mat[i].size();
+        while (l < r) { // lower bound of 1 in this row
+            int m = l + (r - l) / 2;
+            if (mat[i][m] >= 1) r = m; else l = m + 1;
+        }
+        int count = mat[i].size() - l;
+        if (count > bestCount) { bestCount = count; bestRow = i; }
+    }
+    return bestRow;
+}`,
+        variations: [],
+        gotchas: ["This only beats a plain O(rows*cols) scan when the rows are genuinely sorted — always confirm that assumption before reaching for binary search."]
+      },
+      {
+        name: "Search in a 2D Matrix II",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/search-a-2d-matrix-ii/",
+        idea: "This grid is sorted along rows AND columns independently, but rows aren't guaranteed to chain together like in 'Search a 2D Matrix' (so you can't flatten it into one binary search). Instead, start at the TOP-RIGHT corner: if the current value is too big, an entire column can be eliminated by moving left; if it's too small, an entire row can be eliminated by moving down. Each step rules out a full row or column, giving a 'staircase' search.",
+        time: "O(rows + cols)", space: "O(1)",
+        code: `bool searchMatrix(vector<vector<int>>& matrix, int target) {
+    int row = 0, col = matrix[0].size() - 1;
+    while (row < (int)matrix.size() && col >= 0) {
+        if (matrix[row][col] == target) return true;
+        matrix[row][col] > target ? col-- : row++;
+    }
+    return false;
+}`,
+        variations: ["Search a 2D Matrix (fully sorted grid — flatten to 1D binary search instead of the staircase)"],
+        gotchas: ["Starting from the top-LEFT doesn't work here — from that corner, moving in either direction could go toward or away from the target, so you can't confidently eliminate a whole row or column."]
+      },
+      {
+        name: "Find a Peak Element II",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/find-a-peak-element-ii/",
+        idea: "Binary search over COLUMNS instead of individual cells. For a candidate middle column, find its largest value (scanning down that one column), then check its left and right neighbors in the grid — if a neighbor is bigger, a peak must exist in that direction, so eliminate this column's half and search there. Otherwise, the row-max you found in this column is itself a 2D peak.",
+        time: "O(rows * log cols)", space: "O(1)",
+        code: `vector<int> findPeakGrid(vector<vector<int>>& mat) {
+    int cols = mat[0].size();
+    int l = 0, r = cols - 1;
+    while (l <= r) {
+        int midCol = l + (r - l) / 2;
+        int maxRow = 0;
+        for (int i = 0; i < (int)mat.size(); i++) if (mat[i][midCol] > mat[maxRow][midCol]) maxRow = i;
+        bool leftBigger = midCol > 0 && mat[maxRow][midCol - 1] > mat[maxRow][midCol];
+        bool rightBigger = midCol < cols - 1 && mat[maxRow][midCol + 1] > mat[maxRow][midCol];
+        if (!leftBigger && !rightBigger) return {maxRow, midCol};
+        if (leftBigger) r = midCol - 1; else l = midCol + 1;
+    }
+    return {-1, -1};
+}`,
+        variations: [],
+        gotchas: ["Only compare against LEFT and RIGHT neighbors, not up/down — you're binary searching across columns, so the up/down direction is already handled by taking the column's max."]
+      },
+      {
+        name: "Median of a Row-Wise Sorted Matrix",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/find-median-row-wise-sorted-matrix/",
+        idea: "Binary search over the VALUE range (from the smallest to the largest number in the grid), not over positions. For a candidate value, count how many elements in the whole grid are <= it — using binary search (upper bound) on each row, since each row is sorted. The median is the smallest value where that count reaches past half the total elements.",
+        time: "O(rows * log(maxVal) * log cols)", space: "O(1)",
+        code: `int countLessEqual(vector<vector<int>>& mat, int val) {
+    int count = 0;
+    for (auto& row : mat) {
+        count += upper_bound(row.begin(), row.end(), val) - row.begin();
+    }
+    return count;
+}
+int findMedian(vector<vector<int>>& mat) {
+    int lo = INT_MAX, hi = INT_MIN;
+    for (auto& row : mat) { lo = min(lo, row[0]); hi = max(hi, row.back()); }
+    int need = (mat.size() * mat[0].size()) / 2 + 1;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        countLessEqual(mat, mid) < need ? lo = mid + 1 : hi = mid;
+    }
+    return lo;
+}`,
+        variations: [],
+        gotchas: ["This relies on `upper_bound`, C++'s built-in binary search for STL containers — worth knowing it exists instead of hand-rolling the same loop every time."]
+      }
+    ]
+  },
+
+  {
+    id: "binary-search-answer",
+    name: "Binary Search on the Answer",
+    color: "#8fd4e8",
+    icon: "binary-search-answer",
+    trigger: "\"Find the smallest/largest value that still works\" · a question about a value, not an index, where trying a guess is easy to check but trying every guess is too slow",
+    summary: "The biggest mental shift in binary search: instead of searching for a value INSIDE the array, you're searching over the space of POSSIBLE ANSWERS. If 'does this guess work?' is easy to check, and bigger guesses always stay valid once a smaller one does (or vice versa), binary search applies — even though there's no array being searched at all.",
+    problems: [
+      {
+        name: "Find the Square Root of a Number",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/square-root-of-an-integer/",
+        idea: "You're not searching an array — you're searching the range of possible answers, from 0 up to the number itself. Guess a value; if guess-squared is too big, the real answer is smaller; if guess-squared fits, it might still be bigger. This is the simplest possible introduction to 'binary search on the answer', before the check functions get more complicated in the problems below.",
+        time: "O(log n)", space: "O(1)",
+        code: `int floorSqrt(int n) {
+    int l = 1, r = n, ans = 0;
+    while (l <= r) {
+        long m = l + (r - l) / 2;
+        if (m * m <= n) { ans = m; l = m + 1; }
+        else r = m - 1;
+    }
+    return ans;
+}`,
+        variations: [],
+        gotchas: ["Use a wider type like `long` for `m * m` — squaring a large `int` guess can silently overflow."]
+      },
+      {
+        name: "Find the Nth Root of a Number",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/n-th-root-of-a-number/",
+        idea: "Same idea as square root, generalized: binary search a guess, and check `guess^n` against the target instead of `guess^2`. Everything else about the search — narrowing the range based on whether the guess is too big or too small — stays identical.",
+        time: "O(log(n) * log(exponent))", space: "O(1)",
+        code: `long power(long base, int exp, long cap) {
+    long result = 1;
+    for (int i = 0; i < exp; i++) {
+        result *= base;
+        if (result > cap) return cap + 1; // early exit, avoid overflow
+    }
+    return result;
+}
+int nthRoot(int n, int m) {
+    int l = 1, r = m;
+    while (l <= r) {
+        int mid = l + (r - l) / 2;
+        long val = power(mid, n, m);
+        if (val == m) return mid;
+        val < m ? l = mid + 1 : r = mid - 1;
+    }
+    return -1; // no exact integer root
+}`,
+        variations: [],
+        gotchas: ["Bail out early once the running power exceeds the target — otherwise it can overflow long before the loop naturally ends."]
+      },
+      {
+        name: "Koko Eating Bananas",
         difficulty: "Medium",
         link: "https://leetcode.com/problems/koko-eating-bananas/",
-        idea: "This is a different way to use binary search — not to find a number in the array, but to find the best possible ANSWER to a question. Notice that eating faster always means finishing in fewer-or-equal hours — that's a predictable, one-direction relationship. So guess a speed, check if it's fast enough, and binary search on the guess itself until you find the slowest speed that still works.",
+        idea: "Eating faster always means finishing in fewer-or-equal hours — that's a predictable, one-direction relationship, which is exactly what binary search on the answer needs. Guess a speed, check if it's fast enough by simulating the hours it'd take, and binary search on the guess itself until you find the SLOWEST speed that still finishes in time.",
         time: "O(n log(biggest pile))", space: "O(1)",
         code: `int minEatingSpeed(vector<int>& piles, int h) {
     int l = 1, r = *max_element(piles.begin(), piles.end());
@@ -815,8 +1103,201 @@ public:
     }
     return l;
 }`,
-        variations: ["Capacity To Ship Packages Within D Days", "Split Array Largest Sum", "Minimum Days to Make M Bouquets"],
+        variations: [],
         gotchas: ["Once you recognize this shape — 'find the smallest number that still works' — you'll start seeing it everywhere in medium/hard problems."]
+      },
+      {
+        name: "Capacity to Ship Packages Within D Days",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+        idea: "A bigger ship capacity always needs fewer-or-equal days to ship everything — same one-direction relationship as Koko. Binary search over possible capacities (from the single heaviest package up to the sum of everything), and for each guess, simulate loading the ship greedily to count how many days it'd take.",
+        time: "O(n log(sum of weights))", space: "O(1)",
+        code: `int shipWithinDays(vector<int>& weights, int days) {
+    int l = *max_element(weights.begin(), weights.end());
+    int r = accumulate(weights.begin(), weights.end(), 0);
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        int daysNeeded = 1, load = 0;
+        for (int w : weights) {
+            if (load + w > m) { daysNeeded++; load = 0; }
+            load += w;
+        }
+        daysNeeded <= days ? r = m : l = m + 1;
+    }
+    return l;
+}`,
+        variations: [],
+        gotchas: ["The lower bound MUST start at the heaviest single package — any smaller capacity could never even fit that one package onto the ship."]
+      },
+      {
+        name: "Minimum Days to Make M Bouquets",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/",
+        idea: "Waiting longer only ever helps (more flowers have bloomed), never hurts — another one-direction relationship. Binary search over possible days-waited; for each guess, check how many bouquets of k adjacent bloomed flowers could be made, and find the earliest day where m bouquets become possible.",
+        time: "O(n log(maxDay))", space: "O(1)",
+        code: `int bouquetsPossible(vector<int>& bloomDay, int day, int k) {
+    int bouquets = 0, streak = 0;
+    for (int d : bloomDay) {
+        if (d <= day) streak++; else streak = 0;
+        if (streak == k) { bouquets++; streak = 0; }
+    }
+    return bouquets;
+}
+int minDays(vector<int>& bloomDay, int m, int k) {
+    if ((long)m * k > (int)bloomDay.size()) return -1; // impossible
+    int l = *min_element(bloomDay.begin(), bloomDay.end());
+    int r = *max_element(bloomDay.begin(), bloomDay.end());
+    while (l < r) {
+        int mid = l + (r - l) / 2;
+        bouquetsPossible(bloomDay, mid, k) >= m ? r = mid : l = mid + 1;
+    }
+    return l;
+}`,
+        variations: [],
+        gotchas: ["Check upfront whether `m * k` even fits within the total number of flowers — if not, no amount of waiting will ever make it possible."]
+      },
+      {
+        name: "Find the Smallest Divisor Given a Threshold",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/",
+        idea: "A bigger divisor always produces a smaller-or-equal sum of quotients — the familiar one-direction relationship again. Binary search over possible divisors, and for each guess, sum up `ceil(num / divisor)` across the array to check if it fits under the threshold.",
+        time: "O(n log(maxElement))", space: "O(1)",
+        code: `int smallestDivisor(vector<int>& nums, int threshold) {
+    int l = 1, r = *max_element(nums.begin(), nums.end());
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        long sum = 0;
+        for (int x : nums) sum += (x + m - 1) / m; // ceil(x / m)
+        sum <= threshold ? r = m : l = m + 1;
+    }
+    return l;
+}`,
+        variations: [],
+        gotchas: ["This is structurally identical to Koko Eating Bananas — same ceiling-division check, different cover story."]
+      },
+      {
+        name: "Kth Missing Positive Number",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/kth-missing-positive-number/",
+        idea: "At any index i, the count of positive numbers missing so far is `arr[i] - (i + 1)` — the gap between where a number 'should' be if nothing were missing, and where it actually is. That gap only ever grows or stays the same moving right, so binary search for the first index where the gap reaches k, then work out the exact missing number from there.",
+        time: "O(log n)", space: "O(1)",
+        code: `int findKthPositive(vector<int>& arr, int k) {
+    int l = 0, r = arr.size() - 1;
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        int missingBefore = arr[m] - (m + 1);
+        if (missingBefore < k) l = m + 1; else r = m - 1;
+    }
+    return l + k; // l is now the count of array elements before the answer
+}`,
+        variations: [],
+        gotchas: ["A plain linear scan also solves this in O(n) and is perfectly fine for small inputs — binary search is the follow-up flex, not strictly required."]
+      },
+      {
+        name: "Aggressive Cows",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/aggressive-cows-detailed-solution/",
+        idea: "You want to MAXIMIZE the minimum distance between placed cows — a bigger candidate distance is always harder to achieve (fewer cows fit), so this flips the usual direction: binary search for the LARGEST distance that's still achievable. For each guess, greedily place cows as far apart as that distance allows and count how many fit.",
+        time: "O(n log(maxPosition))", space: "O(1)",
+        code: `bool canPlace(vector<int>& stalls, int cows, int dist) {
+    int count = 1, last = stalls[0];
+    for (int i = 1; i < (int)stalls.size(); i++) {
+        if (stalls[i] - last >= dist) { count++; last = stalls[i]; }
+    }
+    return count >= cows;
+}
+int aggressiveCows(vector<int>& stalls, int cows) {
+    sort(stalls.begin(), stalls.end());
+    int l = 1, r = stalls.back() - stalls[0], ans = 0;
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        if (canPlace(stalls, cows, m)) { ans = m; l = m + 1; }
+        else r = m - 1;
+    }
+    return ans;
+}`,
+        variations: [],
+        gotchas: ["This is a 'maximize the minimum' problem, not 'minimize' — the search direction flips compared to Koko, so double check which way you're narrowing."]
+      },
+      {
+        name: "Allocate Books / Split Array Largest Sum / Painter's Partition",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/split-array-largest-sum/",
+        idea: "These three problems (allocate books to students, split an array to minimize the largest subarray sum, and assign painting boards to painters) are the exact same algorithm wearing three different costumes. All of them ask: split a sequence into k contiguous groups to MINIMIZE the largest group's total. Binary search over that maximum-allowed total; for each guess, greedily pack elements into groups and count how many groups it takes — fewer groups needed means the guess can shrink further.",
+        time: "O(n log(sum of elements))", space: "O(1)",
+        code: `int groupsNeeded(vector<int>& nums, int maxSum) {
+    int groups = 1, current = 0;
+    for (int x : nums) {
+        if (current + x > maxSum) { groups++; current = 0; }
+        current += x;
+    }
+    return groups;
+}
+int splitArray(vector<int>& nums, int k) {
+    int l = *max_element(nums.begin(), nums.end());
+    int r = accumulate(nums.begin(), nums.end(), 0);
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        groupsNeeded(nums, m) <= k ? r = m : l = m + 1;
+    }
+    return l;
+}`,
+        variations: [],
+        gotchas: ["Recognizing that three differently-worded problems are secretly identical is the real skill here — the code barely changes between them."]
+      },
+      {
+        name: "Minimize Max Distance to Gas Station",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/minimize-maximum-distance-between-gas-stations/",
+        idea: "Same 'minimize the maximum gap' spirit as Aggressive Cows, but now the answer isn't a whole number — it's a real (floating-point) distance, since you're allowed to place new stations anywhere along the road, not just at fixed points. Binary search over a continuous range instead of integers, stopping once the range shrinks below some small precision threshold instead of when `low == high`.",
+        time: "O(n log(precision needed))", space: "O(1)",
+        code: `int stationsNeeded(vector<int>& stations, double dist) {
+    int count = 0;
+    for (int i = 0; i + 1 < (int)stations.size(); i++) {
+        int gap = stations[i+1] - stations[i];
+        count += (int)(gap / dist); // extra stations needed to shrink this gap under 'dist'
+    }
+    return count;
+}
+double minimizeMaxDistance(vector<int>& stations, int k) {
+    double l = 0, r = 1e9;
+    for (int iter = 0; iter < 100; iter++) { // fixed iteration count instead of exact equality
+        double mid = (l + r) / 2;
+        stationsNeeded(stations, mid) > k ? l = mid : r = mid;
+    }
+    return r;
+}`,
+        variations: [],
+        gotchas: ["With floating-point binary search, looping a fixed number of times (or until the range is tinier than your needed precision) replaces the usual `l < r` integer condition — exact equality on doubles isn't reliable."]
+      },
+      {
+        name: "Median of Two Sorted Arrays",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+        idea: "Binary search on a PARTITION point instead of a value. Pick a split point in the smaller array; that automatically determines the matching split point in the other array so that both 'left halves' combined hold exactly half of all elements. If the boundary values line up correctly (everything on the left <= everything on the right), you've found the partition — the median is just built from the four boundary values. If not, shift the partition and try again.",
+        time: "O(log(min(m, n)))", space: "O(1)",
+        code: `double findMedianSortedArrays(vector<int>& a, vector<int>& b) {
+    if (a.size() > b.size()) return findMedianSortedArrays(b, a); // always binary search the smaller array
+    int n1 = a.size(), n2 = b.size(), total = n1 + n2;
+    int l = 0, r = n1;
+    while (l <= r) {
+        int cut1 = l + (r - l) / 2;
+        int cut2 = (total + 1) / 2 - cut1;
+        int leftA  = (cut1 == 0)  ? INT_MIN : a[cut1 - 1];
+        int rightA = (cut1 == n1) ? INT_MAX : a[cut1];
+        int leftB  = (cut2 == 0)  ? INT_MIN : b[cut2 - 1];
+        int rightB = (cut2 == n2) ? INT_MAX : b[cut2];
+        if (leftA <= rightB && leftB <= rightA) {
+            if (total % 2 == 0) return (max(leftA, leftB) + min(rightA, rightB)) / 2.0;
+            return max(leftA, leftB);
+        }
+        else if (leftA > rightB) r = cut1 - 1;
+        else l = cut1 + 1;
+    }
+    return 0.0;
+}`,
+        variations: ["Kth Element of Two Sorted Arrays (same partition idea, generalized to any k instead of exactly the median)"],
+        gotchas: ["Always binary search over the SMALLER array — this keeps the range small and guarantees the O(log(min(m,n))) time bound."]
       }
     ]
   },
@@ -1685,7 +2166,8 @@ const TRIGGER_TABLE = [
   { keyword: "\"Subarray sum equals k\"", pattern: "prefix-sum" },
   { keyword: "Max or min sum of a contiguous stretch", pattern: "kadane" },
   { keyword: "Sorted or rotated-sorted array — search it fast", pattern: "binary-search" },
-  { keyword: "\"Find the smallest/largest value that still works\"", pattern: "binary-search" },
+  { keyword: "Binary search on a sorted 2D grid", pattern: "binary-search-2d" },
+  { keyword: "\"Find the smallest/largest value that still works\"", pattern: "binary-search-answer" },
   { keyword: "\"Have I seen this number before?\"", pattern: "hashing" },
   { keyword: "Numbers limited to a known range, find missing/duplicate", pattern: "cyclic-sort" },
   { keyword: "Array of [start, end] pairs", pattern: "merge-intervals" },
