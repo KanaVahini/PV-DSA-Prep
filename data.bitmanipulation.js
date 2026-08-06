@@ -381,6 +381,7 @@ vector<int> factorizeUsingSPF(int n, vector<int>& spf) {
   }
 ];
 
+
 // Quick-reference: keyword → pattern, used by the pattern finder
 const TRIGGER_TABLE = [
   { keyword: "Check, set, or count individual bits", pattern: "bit-basics" },
