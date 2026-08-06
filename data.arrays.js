@@ -2033,63 +2033,6 @@ int reversePairs(vector<int>& arr, int l, int r) {
   },
 
   {
-    id: "bit-manipulation",
-    name: "Bit Manipulation",
-    color: "#b06bf2",
-    icon: "bit-manipulation",
-    trigger: "\"Find the one number that's different\" · needs zero extra memory and numbers come in pairs · anything about powers of two",
-    summary: "XOR cancels out matching pairs of numbers, and a few small bit tricks can isolate exactly the bit you need — handy whenever a hashmap works but the question wants zero extra memory.",
-    problems: [
-      {
-        name: "Single Number",
-        difficulty: "Easy",
-        link: "https://leetcode.com/problems/single-number/",
-        idea: "XOR has a neat property: any number XORed with itself becomes 0, and the order you XOR things in doesn't matter. So if every number except one shows up exactly twice, XORing the whole array together cancels out every pair, leaving only the lonely number standing.",
-        time: "O(n)", space: "O(1)",
-        code: `int singleNumber(vector<int>& nums) {
-    int res = 0;
-    for (int x : nums) res ^= x;
-    return res;
-}`,
-        variations: ["Single Number II (everything else appears 3 times — needs counting bits at each position)", "Single Number III (two unique numbers instead of one)"],
-        gotchas: []
-      },
-      {
-        name: "Single Number III",
-        difficulty: "Medium",
-        link: "https://leetcode.com/problems/single-number-iii/",
-        idea: "With two unique numbers instead of one, XORing everything gives you (a XOR b), not either number by itself. But that result still tells you something: any bit that's turned on in it must be different between a and b. Pick one such bit, and use it to split the whole array into two groups — a and b are guaranteed to land in different groups. XOR each group on its own to get each number.",
-        time: "O(n)", space: "O(1)",
-        code: `vector<int> singleNumber3(vector<int>& nums) {
-    int xorAll = 0;
-    for (int x : nums) xorAll ^= x;
-    int diffBit = xorAll & (-xorAll); // lowest set bit
-    int a = 0;
-    for (int x : nums) if (x & diffBit) a ^= x;
-    int b = xorAll ^ a;
-    return {a, b};
-}`,
-        variations: [],
-        gotchas: ["`x & (-x)` is a handy trick that isolates the lowest 'on' bit of a number — it shows up in a lot of bit problems."]
-      },
-      {
-        name: "Counting Bits",
-        difficulty: "Easy",
-        link: "https://leetcode.com/problems/counting-bits/",
-        idea: "Instead of counting the bits of every number from scratch, notice that any number is just a smaller number (itself shifted right by one) with one extra bit tacked on. So its bit count is: the bit count of that smaller number, plus 1 if the original number is odd. You can build the whole answer list using answers you already calculated.",
-        time: "O(n)", space: "O(n)",
-        code: `vector<int> countBits(int n) {
-    vector<int> res(n + 1, 0);
-    for (int i = 1; i <= n; i++) res[i] = res[i >> 1] + (i & 1);
-    return res;
-}`,
-        variations: [],
-        gotchas: []
-      }
-    ]
-  },
-
-  {
     id: "construction-rearrangement",
     name: "Array Construction & Rearrangement",
     color: "#57c2e8",
@@ -2175,7 +2118,6 @@ const TRIGGER_TABLE = [
   { keyword: "\"Next bigger/smaller number\"", pattern: "monotonic-stack" },
   { keyword: "\"Fewest jumps\" or \"can you reach the end\"", pattern: "greedy" },
   { keyword: "Sorting it first makes everything easy", pattern: "sorting-tricks" },
-  { keyword: "\"Find the one number that's different\", no extra memory", pattern: "bit-manipulation" },
   { keyword: "Build or rearrange the array into a specific target shape", pattern: "construction-rearrangement" }
 ];
 
