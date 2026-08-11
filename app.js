@@ -15,7 +15,7 @@
 
   const DEFAULT_TOPIC = "arrays";
 
-  // progressByUser[user][topicId] = { [problemId]: {status, notes} }
+  // progressByUser[user][topicId] = { [problemId]: {status} }
   const progressByUser = {};
   USERS.forEach((u) => { progressByUser[u] = {}; });
 
@@ -491,13 +491,6 @@
       return `<div class="reviser-block" data-user="${user}"><span class="reviser-name">${user}</span><span class="status-dot" data-user-dot="${user}"></span><span class="status-readonly-label" data-user-label="${user}">Not started</span></div>`;
     }).join("");
 
-    const notesGrid = USERS.map((user) => `
-      <div class="notes-block">
-        <div class="mini-list-label">${user}${user === currentUser ? " (editable)" : ""}</div>
-        <textarea class="notes" data-user="${user}" ${user === currentUser ? "" : "disabled"}
-          placeholder="${user === currentUser ? "Jot a reminder for next time…" : "No notes yet."}"></textarea>
-      </div>`).join("");
-
     card.innerHTML = `
       <div class="problem-top">
         <h3><a href="${problem.link}" target="_blank" rel="noopener">${problem.name}</a></h3>
@@ -513,7 +506,6 @@
       ${variations}
       ${gotchas}
       <div class="reviser-row">${reviserRow}</div>
-      <div class="notes-grid">${notesGrid}</div>
     `;
 
     card.querySelectorAll(".status-btn").forEach((btn) => {
@@ -525,11 +517,6 @@
         if (newStatus === "solved") celebrate(btn);
       });
     });
-
-    const myTextarea = card.querySelector(`textarea.notes[data-user="${currentUser}"]`);
-    if (myTextarea) {
-      myTextarea.addEventListener("blur", () => Store.setEntry(currentUser, topicIdAtRender, problemId, { notes: myTextarea.value }));
-    }
 
     return card;
   }
@@ -591,8 +578,6 @@
       const entry = progressByUser[user][topicId][problemId] || {};
       if (user === currentUser) {
         card.querySelectorAll(".status-btn").forEach((btn) => { btn.dataset.active = String(btn.dataset.status === entry.status); });
-        const ta = card.querySelector(`textarea.notes[data-user="${user}"]`);
-        if (ta && document.activeElement !== ta) ta.value = entry.notes || "";
       } else {
         const dot = card.querySelector(`[data-user-dot="${user}"]`);
         const label = card.querySelector(`[data-user-label="${user}"]`);
@@ -601,8 +586,6 @@
           const sd = STATUSES.find((s) => s.key === entry.status);
           label.textContent = sd ? sd.label : "Not started";
         }
-        const ta = card.querySelector(`textarea.notes[data-user="${user}"]`);
-        if (ta) ta.value = entry.notes || "";
       }
     });
     updateSidebarProgress();
