@@ -399,6 +399,11 @@
         <h1 class="dash-greeting">Welcome back, ${currentUser}</h1>
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
+        <div class="notes-removed-alert" style="margin:14px 0 20px;padding:14px 18px;border-radius:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.35);color:#dc2626;text-align:center;line-height:1.6;box-shadow:0 4px 14px rgba(220,38,38,0.16);font-weight:500;">
+          <strong>Notes are no longer available in this section.</strong><br>
+          <em>Your previous notes have been saved as screenshots.</em>
+        </div>
+
         <div class="progress-overview">${totalsHtml}</div>
 
         <div class="revise-queue" id="revise-queue">
