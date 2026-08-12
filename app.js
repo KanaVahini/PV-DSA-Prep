@@ -413,7 +413,10 @@
       }).join("");
 
       const html = `
-        <h1 class="dash-greeting">Welcome back, ${currentUser}</h1>
+        <h1 class="dash-greeting">Hello, ${currentUser}... However we are not talking and ig this is best time to increase our attention span. so i decided these things 1)not using phone whole day untill some call comes. will turn on internet for 10min @ night 9:30pm and see whatsapp only during that time
+        2)will not use internet in laptop too except afternoon 1hr for project or for any other doubt clear(if i get also then too note it down somewhere and clear it out everthing at that 1hr time.) 
+        3)if bored any time andree will sit like that only bored (it will increase creativity and helps cut distraction)....         neenu try to follow this...                                 
+        ashtee puttii, love you so much... will come back stronger and more focused....  after reading this msg, change this and reply with your thoughts and tell whether you too are following all these or not, i will see that in my 1hr doubt time in my laptop... </h1>
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
         <div class="notes-removed-alert" style="margin:14px 0 20px;padding:14px 18px;border-radius:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.35);color:#dc2626;text-align:center;line-height:1.6;box-shadow:0 4px 14px rgba(220,38,38,0.16);font-weight:500;">
