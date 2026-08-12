@@ -159,7 +159,24 @@
     let localListeners = [];
     function onLocalChange(fn) { localListeners.push(fn); }
 
-    return { init, subscribe, setEntry, onLocalChange, isFirebase: () => useFirebase };
+    // Presence: marks `user` online while their tab is connected, and clears
+    // itself automatically the moment they disconnect/close the tab.
+    function initPresence(user) {
+      if (!useFirebase) return;
+      const presenceRef = db.ref(`presence/${user}`);
+      db.ref(".info/connected").on("value", (snap) => {
+        if (snap.val() === true) {
+          presenceRef.onDisconnect().remove();
+          presenceRef.set(true);
+        }
+      });
+    }
+    function subscribePresence(user, cb) {
+      if (!useFirebase) { cb(false); return; }
+      db.ref(`presence/${user}`).on("value", (snap) => cb(snap.val() === true));
+    }
+
+    return { init, subscribe, setEntry, onLocalChange, initPresence, subscribePresence, isFirebase: () => useFirebase };
   })();
 
   function slug(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
@@ -722,6 +739,13 @@
       topicIds().forEach((t) => {
         Store.subscribe(u, t, (uu, tt, data) => applyProgressToPatternCards(uu, tt, data));
       });
+    });
+
+    Store.initPresence(currentUser);
+    const otherUser = USERS.find((u) => u !== currentUser);
+    Store.subscribePresence(otherUser, (isOnline) => {
+      const dot = document.getElementById("presence-dot");
+      if (dot) dot.style.background = isOnline ? "#7c6bff" : "#4a4a58";
     });
 
     window.addEventListener("hashchange", handleRoute);
