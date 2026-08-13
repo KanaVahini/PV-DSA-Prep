@@ -413,10 +413,20 @@
       }).join("");
 
       const html = `
-        <h1 class="dash-greeting">Hello, ${currentUser}... However we are not talking and ig this is best time to increase our attention span. so i decided these things 1)not using phone whole day untill some call comes. will turn on internet for 10min @ night 9:30pm and see whatsapp only during that time
-        2)will not use internet in laptop too except for leetcode, PV-DSA, striver matte cluade strictly. remaining anything can be used in 1hr for any other doubt clear or applying for internship(if i get also then too note it down somewhere and clear it out everthing at that 1hr time.) 
-        3)if bored any time andree will sit like that only bored (it will increase creativity and helps cut distraction)....         neenu try to follow this...                                 
-        ashtee puttii, love you so much... will come back stronger and more focused....  after reading this msg, change this and reply with your thoughts and tell whether you too are following all these or not, i will see that in my laptop...   matte attend both weekly contest of leetcode without miss </h1>
+        <h1 class="dash-greeting">Nannaaa... first of all b4 anything, i m missing u soooo much here, i really can’t tell you how much i’m thinking about u anta... suddenly everything changed, it feels so different without you pruthvi... but i’ll keep all that aside for now.<br><br>
+
+        Coming to what u told, this is actually what i needed..ashtu focus beku antane ishtella madidu. Iga mindset proper aytu nindu. U were telling noo in clg, i m only struggling with myself, i have fallen into this trap, not able to focus, too many distractions nd all... that is why I came up with this. idu perfect time for you to come back to yourself puttu... to the old version of you what i always feel proud abt...<br><br>
+
+        And coming to my part, fully avoiding nanu kuda youtube ivaginda nd mainly daytime sleep... i will come out of that loop too. I know it won’t happen in one day, adree will do it slowly nd adu focus sprints will follow. I want to become better too, along with you.<br><br>
+
+        This is why i actually decided to take space. Idu one of the main intentions behind this. We wanted to become stronger in every side.. knowledge wise, physically, and emotionally. So idu madilla antha andre, ishtella blocking, keeping this much distance, all of it artha ne iralla. We didn’t do all this just to stay away from each other... we did it so that when we come back, we are stronger versions of ourselves nd our relation grows much stronger from there.<br><br>
+
+        So good... be strong like this only. What all you mentioned, adu mindset keep nd work puttu... don’t lose this mindset. nija i am happy seeing you focus like this. And adu LeetCode aur Git alli make it a green forest, don’t forget that daily... ashte<br><br>
+
+        Love u soooo much Pruthvi<span style="color:red;font-size:34px">♥</span>...i will be always there with u, no matter how much hard days become..even when you feel like u’re alone in everything, remember that somewhere there is someone who is silently praying for you and waiting to see you win...<br>
+
+        Love u puttu...Both will come back stronger...Take care of my Athige..</h1>
+        
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
         <div class="notes-removed-alert" style="margin:14px 0 20px;padding:14px 18px;border-radius:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.35);color:#dc2626;text-align:center;line-height:1.6;box-shadow:0 4px 14px rgba(220,38,38,0.16);font-weight:500;">
