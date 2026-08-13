@@ -413,19 +413,24 @@
       }).join("");
 
       const html = `
-        <h1 class="dash-greeting">Nannaaa... first of all b4 anything, i m missing u soooo much here, i really can’t tell you how much i’m thinking about u anta... suddenly everything changed, it feels so different without you pruthvi... but i’ll keep all that aside for now.<br><br>
+<h1 class="dash-greeting">Thank you putttiiiii,<br>i am filled with tears ree putttiii after reading full, happy listening... naanu missing you so much.... love you so much...<br><br>
 
-        Coming to what u told, this is actually what i needed..ashtu focus beku antane ishtella madidu. Iga mindset proper aytu nindu. U were telling noo in clg, i m only struggling with myself, i have fallen into this trap, not able to focus, too many distractions nd all... that is why I came up with this. idu perfect time for you to come back to yourself puttu... to the old version of you what i always feel proud abt...<br><br>
+keep that aside... iga, day by day improve slowly and focus on improving focusing and come back to normal and increasing attention spam...<br><br>
 
-        And coming to my part, fully avoiding nanu kuda youtube ivaginda nd mainly daytime sleep... i will come out of that loop too. I know it won’t happen in one day, adree will do it slowly nd adu focus sprints will follow...will follow the things what u mentioned..idu pakka from today.. I want to become better too, along with you.<br><br>
+slowly cultivate these habits-<br>
+1) sleeping early<br>
+2) waking up early(slowly slowly daily swalpa swalpa more early)<br>
+3) excercise<br>
+4) meditation<br>
+5) fully utilize being in home and eat to the fullest... all healthy healthy eat everything...<br>
+6) swalpa time daily spend in boredom..<br><br>
 
-        This is why i actually decided to take space. Idu one of the main intentions behind this. We wanted to become stronger in every side.. knowledge wise, physically, and emotionally. So idu madilla antha andre, ishtella blocking, keeping this much distance, all of it artha ne iralla. We didn’t do all this just to stay away from each other... we did it so that when we come back, we are stronger versions of ourselves nd our relation grows much stronger from there.<br><br>
+skill to learn<br>
+1) learn skill of properly explaining things to people(it helps in interveiw). and practice by explaining any dsa question or any of project in resume...<br><br>
 
-        So good... be strong like this only. What all you mentioned, adu mindset keep nd work puttu... don’t lose this mindset. nija i am happy seeing you focus like this. And adu LeetCode aur Git alli make it a green forest, don’t forget that daily... ashte<br><br>
-
-        Love u soooo much Pruthvi<span style="color:red;font-size:34px">♥</span>...i will be always there with u, no matter how much hard days become..even when you feel like u’re alone in everything, remember that somewhere there is someone who is silently praying for you and waiting to see you win...<br>
-
-        Love u puttu...Both will come back stronger...Take care of my Athige..</h1>
+slowly slowly cultivate these habits..<br>
+<br>if any other habits or anything in mind helu...<br><br>
+ashteee puttiiii.... love you<span style="color:red;font-size:34px">♥</span> infinite</h1> 
         
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
