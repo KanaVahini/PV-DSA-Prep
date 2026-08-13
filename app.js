@@ -417,7 +417,7 @@
 
         Coming to what u told, this is actually what i needed..ashtu focus beku antane ishtella madidu. Iga mindset proper aytu nindu. U were telling noo in clg, i m only struggling with myself, i have fallen into this trap, not able to focus, too many distractions nd all... that is why I came up with this. idu perfect time for you to come back to yourself puttu... to the old version of you what i always feel proud abt...<br><br>
 
-        And coming to my part, fully avoiding nanu kuda youtube ivaginda nd mainly daytime sleep... i will come out of that loop too. I know it won’t happen in one day, adree will do it slowly nd adu focus sprints will follow. I want to become better too, along with you.<br><br>
+        And coming to my part, fully avoiding nanu kuda youtube ivaginda nd mainly daytime sleep... i will come out of that loop too. I know it won’t happen in one day, adree will do it slowly nd adu focus sprints will follow...will follow the things what u mentioned..idu pakka from today.. I want to become better too, along with you.<br><br>
 
         This is why i actually decided to take space. Idu one of the main intentions behind this. We wanted to become stronger in every side.. knowledge wise, physically, and emotionally. So idu madilla antha andre, ishtella blocking, keeping this much distance, all of it artha ne iralla. We didn’t do all this just to stay away from each other... we did it so that when we come back, we are stronger versions of ourselves nd our relation grows much stronger from there.<br><br>
 
