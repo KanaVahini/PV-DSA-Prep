@@ -413,9 +413,7 @@
       }).join("");
 
       const html = `
-<h1 class="dash-greeting">Thank you putttiiiii,<br>i am filled with tears ree putttiii after reading full, happy listening... naanu missing you so much.... love you so much...<br><br>
-
-keep that aside... iga, day by day improve slowly and focus on improving focusing and come back to normal and increasing attention spam...<br><br>
+<h1 class="dash-greeting">ishte puttu, i'll keep these in mind nd really work on them.<br><br>
 
 slowly cultivate these habits-<br>
 1) sleeping early<br>
@@ -429,8 +427,7 @@ skill to learn<br>
 1) learn skill of properly explaining things to people(it helps in interveiw). and practice by explaining any dsa question or any of project in resume...<br><br>
 
 slowly slowly cultivate these habits..<br>
-<br>if any other habits or anything in mind helu...<br><br>
-ashteee puttiiii.... love you<span style="color:red;font-size:34px">♥</span> infinite</h1> 
+</h1> 
         
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
 
