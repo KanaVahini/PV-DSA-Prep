@@ -15,7 +15,7 @@
 
   const DEFAULT_TOPIC = "arrays";
 
-  // progressByUser[user][topicId] = { [problemId]: {status} }
+  // progressByUser[user][topicId] = { [problemId]: {status, notes} }
   const progressByUser = {};
   USERS.forEach((u) => { progressByUser[u] = {}; });
 
@@ -74,6 +74,17 @@
     "morris-traversal": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="5" r="2"/><circle cx="5" cy="13" r="2"/><circle cx="14" cy="13" r="2"/><path d="M9 7L5 11M9 7l5 4"/><path d="M5 11a6 6 0 0 1 4-8" stroke-dasharray="2 2"/></svg>`,
     "tree-views": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-5 10-5 10 5 10 5-3 5-10 5-10-5-10-5z"/><circle cx="12" cy="12" r="2.5"/></svg>`,
     "tree-paths-ancestors": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><circle cx="6" cy="13" r="2" opacity="0.35"/><circle cx="17" cy="13" r="2"/><circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M12 7l5 6M17 15l3 5"/><path d="M12 7L6 11" opacity="0.35"/></svg>`,
+    "bst-basics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><circle cx="6" cy="14" r="2"/><circle cx="18" cy="14" r="2"/><path d="M12 7.2L6 11.8M12 7.2l6 4.6"/><path d="M4 18h4M16 18h4" opacity="0.5"/></svg>`,
+    "bst-advanced": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1.8"/><circle cx="5" cy="13" r="1.8"/><circle cx="13" cy="13" r="1.8"/><path d="M9 7.8L5 11.2M9 7.8l4 3.4"/><circle cx="18" cy="17" r="3.2"/><path d="M20.3 19.3L23 22"/></svg>`,
+    // Graphs
+    "graph-basics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="16" r="2"/><path d="M8 6h8M7.2 7.6L11 14.4M16.8 7.6L13 14.4"/></svg>`,
+    "graph-grid-traversal": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.35"/><rect x="9" y="9" width="6" height="6" fill="currentColor" opacity="0.4" stroke="none"/></svg>`,
+    "graph-cycles-bipartite": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="8" r="2"/><circle cx="17" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="17" r="2"/><path d="M8.6 9.2L15.4 6.8M8.4 9.6l3 5.8M15.6 9.6l-3 5.8"/></svg>`,
+    "graph-topo-sort": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="20" cy="12" r="1.8" fill="currentColor" stroke="none"/><path d="M6 12h4M14 12h4"/></svg>`,
+    "graph-shortest-path": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4" cy="18" r="2"/><circle cx="20" cy="6" r="2" fill="currentColor" stroke="none"/><path d="M6 16.5L18 7.5" stroke-dasharray="3 2"/></svg>`,
+    "implicit-graph-bfs": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6" opacity="0.5"/><circle cx="12" cy="12" r="10" opacity="0.25"/></svg>`,
+    "graph-mst-dsu": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="5" cy="18" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 6.8L17.5 6.8M5 8v8M19 8v8"/></svg>`,
+    "graph-scc-bridges": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="2.3"/><circle cx="19" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M7.5 10.5l4-2M7.5 13.5l4 2M11.5 8.5l5 2M11.5 15.5l5-2" opacity="0.4"/><path d="M9 12h6" stroke-dasharray="2 1.5"/></svg>`,
     // Dynamic Programming
     "dp-fundamentals": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>`,
     "dp-1d": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h4v-4h4v-4h4v-4h4V4"/></svg>`,
@@ -89,16 +100,7 @@
     "stack-fundamentals": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="4" width="14" height="4" rx="1"/><rect x="5" y="10" width="14" height="4" rx="1"/><rect x="5" y="16" width="14" height="4" rx="1"/></svg>`,
     "bracket-matching": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"/><path d="M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg>`,
     "area-water": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M9 20V6M14 20V13M19 20V8"/><path d="M2 16q2-1.5 4 0t4 0 4 0 4 0" opacity="0.6"/></svg>`,
-    "design-structures": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/><circle cx="17.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/></svg>`,
-    // Graphs
-    "graph-basics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7 6.9L17 6.9M6.3 7.9L11 16.2M17.7 7.9L13 16.2"/></svg>`,
-    "graph-grid-traversal": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.35"/><rect x="9" y="9" width="6" height="6" fill="currentColor" opacity="0.35" stroke="none"/></svg>`,
-    "graph-cycles-bipartite": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="7" r="2.3" fill="currentColor"/><circle cx="7" cy="17" r="2.3" fill="currentColor"/><circle cx="17" cy="17" r="2.3"/><path d="M9 8l6 0M8 9l0 6M16 9l0 6M9 16l6 0"/></svg>`,
-    "graph-topo-sort": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><path d="M6.3 12h3.4M14.3 12h3.4"/><path d="M9 10.5l1.3 1.5-1.3 1.5M17 10.5l1.3 1.5-1.3 1.5"/></svg>`,
-    "graph-shortest-path": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="18" r="1.8" fill="currentColor" stroke="none"/><circle cx="20" cy="6" r="1.8" fill="currentColor" stroke="none"/><path d="M4 18C7 12 10 15 13 11S17 6 20 6" opacity="0.9"/><path d="M4 18 20 6" stroke-dasharray="1.5 2.5" opacity="0.35"/></svg>`,
-    "implicit-graph-bfs": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="9" width="6" height="6" rx="1" stroke-dasharray="2 2"/><rect x="16" y="9" width="6" height="6" rx="1" stroke-dasharray="2 2"/><circle cx="12" cy="12" r="2.3"/><path d="M8.3 12h1.4M14.3 12h1.4"/></svg>`,
-    "graph-mst-dsu": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="4" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="19" cy="14" r="2"/><circle cx="5" cy="21" r="1.6" fill="currentColor" stroke="none"/><path d="M11 5.6L6 12.6M13 5.6l5 7M5 16.2V19"/></svg>`,
-    "graph-scc-bridges": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="7" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6.6 8.2L10.4 10.8M17.4 8.2L13.6 10.8M12 14v4"/><path d="M2 7h1.5M20.5 7H22" stroke-width="2.4"/></svg>`
+    "design-structures": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/><circle cx="17.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -159,24 +161,7 @@
     let localListeners = [];
     function onLocalChange(fn) { localListeners.push(fn); }
 
-    // Presence: marks `user` online while their tab is connected, and clears
-    // itself automatically the moment they disconnect/close the tab.
-    function initPresence(user) {
-      if (!useFirebase) return;
-      const presenceRef = db.ref(`presence/${user}`);
-      db.ref(".info/connected").on("value", (snap) => {
-        if (snap.val() === true) {
-          presenceRef.onDisconnect().remove();
-          presenceRef.set(true);
-        }
-      });
-    }
-    function subscribePresence(user, cb) {
-      if (!useFirebase) { cb(false); return; }
-      db.ref(`presence/${user}`).on("value", (snap) => cb(snap.val() === true));
-    }
-
-    return { init, subscribe, setEntry, onLocalChange, initPresence, subscribePresence, isFirebase: () => useFirebase };
+    return { init, subscribe, setEntry, onLocalChange, isFirebase: () => useFirebase };
   })();
 
   function slug(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
@@ -413,28 +398,8 @@
       }).join("");
 
       const html = `
-<h1 class="dash-greeting">ishte puttu, i'll keep these in mind nd really work on them.<br><br>
-
-slowly cultivate these habits-<br>
-1) sleeping early<br>
-2) waking up early(slowly slowly daily swalpa swalpa more early)<br>
-3) excercise<br>
-4) meditation<br>
-5) fully utilize being in home and eat to the fullest... all healthy healthy eat everything...<br>
-6) swalpa time daily spend in boredom..<br><br>
-
-skill to learn<br>
-1) learn skill of properly explaining things to people(it helps in interveiw). and practice by explaining any dsa question or any of project in resume...<br><br>
-
-slowly slowly cultivate these habits..<br>
-</h1> 
-        
+        <h1 class="dash-greeting">Welcome back, ${currentUser}</h1>
         <p class="dash-sub">${currentTopicMeta().tagline}</p>
-
-        <div class="notes-removed-alert" style="margin:14px 0 20px;padding:14px 18px;border-radius:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.35);color:#dc2626;text-align:center;line-height:1.6;box-shadow:0 4px 14px rgba(220,38,38,0.16);font-weight:500;">
-          <strong>Notes are no longer available in this section.</strong><br>
-          <em>Your previous notes have been saved as screenshots.</em>
-        </div>
 
         <div class="progress-overview">${totalsHtml}</div>
 
@@ -528,6 +493,13 @@ slowly slowly cultivate these habits..<br>
       return `<div class="reviser-block" data-user="${user}"><span class="reviser-name">${user}</span><span class="status-dot" data-user-dot="${user}"></span><span class="status-readonly-label" data-user-label="${user}">Not started</span></div>`;
     }).join("");
 
+    const notesGrid = USERS.map((user) => `
+      <div class="notes-block">
+        <div class="mini-list-label">${user}${user === currentUser ? " (editable)" : ""}</div>
+        <textarea class="notes" data-user="${user}" ${user === currentUser ? "" : "disabled"}
+          placeholder="${user === currentUser ? "Jot a reminder for next time…" : "No notes yet."}"></textarea>
+      </div>`).join("");
+
     card.innerHTML = `
       <div class="problem-top">
         <h3><a href="${problem.link}" target="_blank" rel="noopener">${problem.name}</a></h3>
@@ -543,6 +515,7 @@ slowly slowly cultivate these habits..<br>
       ${variations}
       ${gotchas}
       <div class="reviser-row">${reviserRow}</div>
+      <div class="notes-grid">${notesGrid}</div>
     `;
 
     card.querySelectorAll(".status-btn").forEach((btn) => {
@@ -554,6 +527,11 @@ slowly slowly cultivate these habits..<br>
         if (newStatus === "solved") celebrate(btn);
       });
     });
+
+    const myTextarea = card.querySelector(`textarea.notes[data-user="${currentUser}"]`);
+    if (myTextarea) {
+      myTextarea.addEventListener("blur", () => Store.setEntry(currentUser, topicIdAtRender, problemId, { notes: myTextarea.value }));
+    }
 
     return card;
   }
@@ -615,6 +593,8 @@ slowly slowly cultivate these habits..<br>
       const entry = progressByUser[user][topicId][problemId] || {};
       if (user === currentUser) {
         card.querySelectorAll(".status-btn").forEach((btn) => { btn.dataset.active = String(btn.dataset.status === entry.status); });
+        const ta = card.querySelector(`textarea.notes[data-user="${user}"]`);
+        if (ta && document.activeElement !== ta) ta.value = entry.notes || "";
       } else {
         const dot = card.querySelector(`[data-user-dot="${user}"]`);
         const label = card.querySelector(`[data-user-label="${user}"]`);
@@ -623,6 +603,8 @@ slowly slowly cultivate these habits..<br>
           const sd = STATUSES.find((s) => s.key === entry.status);
           label.textContent = sd ? sd.label : "Not started";
         }
+        const ta = card.querySelector(`textarea.notes[data-user="${user}"]`);
+        if (ta) ta.value = entry.notes || "";
       }
     });
     updateSidebarProgress();
@@ -682,7 +664,7 @@ slowly slowly cultivate these habits..<br>
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Synced live — progress is shared between Pruthviraj and Vahini.";
+      banner.textContent = "Update: BST added in Binary Trees";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
@@ -754,13 +736,6 @@ slowly slowly cultivate these habits..<br>
       topicIds().forEach((t) => {
         Store.subscribe(u, t, (uu, tt, data) => applyProgressToPatternCards(uu, tt, data));
       });
-    });
-
-    Store.initPresence(currentUser);
-    const otherUser = USERS.find((u) => u !== currentUser);
-    Store.subscribePresence(otherUser, (isOnline) => {
-      const dot = document.getElementById("presence-dot");
-      if (dot) dot.style.background = isOnline ? "#7c6bff" : "#4a4a58";
     });
 
     window.addEventListener("hashchange", handleRoute);

@@ -841,6 +841,329 @@ vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
         gotchas: ["Once you recognize this as 'the same BFS as Nodes at Distance K, just report how many rounds it took instead of stopping early,' the two problems become nearly identical code."]
       }
     ]
+  },
+
+  {
+    id: "bst-basics",
+    name: "BST Fundamentals & Operations",
+    color: "#aed581",
+    icon: "bst-basics",
+    trigger: "A tree where every left subtree is smaller and every right subtree is bigger — search, insert, delete, or build one",
+    summary: "A BST's one rule (left < node < right, everywhere) is what turns tree operations from O(n) into O(h) — at every node you can throw away an entire half of the remaining tree, the same way binary search throws away half an array.",
+    problems: [
+      {
+        name: "Introduction to Binary Search Trees",
+        difficulty: "Easy",
+        link: "https://www.geeksforgeeks.org/dsa/binary-search-tree-data-structure/",
+        idea: "A BST is a binary tree with one extra rule, applied at EVERY node, not just the root: everything in the left subtree is smaller than the node, and everything in the right subtree is bigger. That single rule is what makes searching, inserting, and deleting all O(h) instead of O(n) — at each node you instantly know which side to go to, discarding the other half. One useful side effect: an inorder traversal of a BST always visits values in sorted order.",
+        time: "O(h) for search/insert/delete, where h is the tree's height", space: "O(1) per node",
+        code: `struct TreeNode {
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+// Example valid BST:
+//        8
+//       / \\
+//      3   10
+//     / \\    \\
+//    1   6    14
+// Inorder traversal: 1, 3, 6, 8, 10, 14 — always sorted for a valid BST`,
+        variations: [],
+        gotchas: ["A balanced BST gives O(log n) operations, but a BST built from already-sorted input degrades into a straight line (essentially a linked list) with O(n) operations — the height guarantee depends entirely on how balanced the tree happens to be."]
+      },
+      {
+        name: "Search in a BST",
+        difficulty: "Easy",
+        link: "https://leetcode.com/problems/search-in-a-binary-search-tree/",
+        idea: "At each node, compare the target to the current value: if it's smaller, the target can ONLY be in the left subtree (everything on the right is guaranteed bigger); if bigger, only the right subtree can contain it. Follow that single direction down instead of checking both sides, the same halving idea as binary search on an array.",
+        time: "O(h)", space: "O(h) recursive, O(1) iterative",
+        code: `TreeNode* searchBST(TreeNode* root, int val) {
+    while (root && root->val != val) {
+        root = (val < root->val) ? root->left : root->right;
+    }
+    return root;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Floor and Ceil in a BST",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/floor-and-ceil-from-a-bst/",
+        idea: "Walk down the tree like a normal search. Every time the current node's value is ≤ the target, it's a CANDIDATE floor — record it, then keep looking further right for something even closer. Every time it's ≥ the target, it's a candidate ceil — record it, then keep looking further left. Whichever candidate you last recorded before falling off the tree is the answer.",
+        time: "O(h)", space: "O(1)",
+        code: `int floorInBST(TreeNode* root, int key) {
+    int floor = -1;
+    while (root) {
+        if (root->val == key) return root->val;
+        if (root->val < key) { floor = root->val; root = root->right; }
+        else root = root->left;
+    }
+    return floor;
+}
+int ceilInBST(TreeNode* root, int key) {
+    int ceil = -1;
+    while (root) {
+        if (root->val == key) return root->val;
+        if (root->val > key) { ceil = root->val; root = root->left; }
+        else root = root->right;
+    }
+    return ceil;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Insert a Node into a BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/insert-into-a-binary-search-tree/",
+        idea: "Walk down the tree following the same left/right rule as searching, until you fall off the tree (reach a null spot) — that null spot is exactly where the new value belongs, since the search path itself proves every ancestor's ordering rule is satisfied by placing it there.",
+        time: "O(h)", space: "O(h) recursive, O(1) iterative",
+        code: `TreeNode* insertIntoBST(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val) root->left = insertIntoBST(root->left, val);
+    else root->right = insertIntoBST(root->right, val);
+    return root;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "Delete a Node in a BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/delete-node-in-a-bst/",
+        idea: "First find the node like a normal search. Deleting it has three cases: no children (just remove it), one child (replace it with that child), or two children — the tricky case, solved by replacing the node's value with its INORDER SUCCESSOR (the smallest value in its right subtree), then deleting that successor instead (which is guaranteed to have at most one child, falling back into an easier case).",
+        time: "O(h)", space: "O(h)",
+        code: `TreeNode* findMin(TreeNode* node) {
+    while (node->left) node = node->left;
+    return node;
+}
+TreeNode* deleteNode(TreeNode* root, int key) {
+    if (!root) return nullptr;
+    if (key < root->val) root->left = deleteNode(root->left, key);
+    else if (key > root->val) root->right = deleteNode(root->right, key);
+    else {
+        if (!root->left) return root->right;
+        if (!root->right) return root->left;
+        TreeNode* successor = findMin(root->right);
+        root->val = successor->val;
+        root->right = deleteNode(root->right, successor->val);
+    }
+    return root;
+}`,
+        variations: [],
+        gotchas: ["Could just as validly use the inorder PREDECESSOR (largest value in the left subtree) instead of the successor — either works, just be consistent."]
+      },
+      {
+        name: "Construct a BST from a Preorder Traversal",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/",
+        idea: "Unlike a plain binary tree, a BST's structure is fully determined by ITS VALUES ALONE — no inorder traversal needed as a second input. Process preorder values one at a time, inserting each with the normal BST insert logic (or, faster, tracking an upper bound for each recursive call so you know when a value belongs to the current subtree versus a different branch entirely).",
+        time: "O(n) with the bounded recursive approach, O(n²) worst case with naive repeated insertion", space: "O(h)",
+        code: `TreeNode* buildBST(vector<int>& preorder, int& idx, int bound) {
+    if (idx == (int)preorder.size() || preorder[idx] > bound) return nullptr;
+    TreeNode* root = new TreeNode(preorder[idx++]);
+    root->left = buildBST(preorder, idx, root->val);
+    root->right = buildBST(preorder, idx, bound);
+    return root;
+}
+TreeNode* bstFromPreorder(vector<int>& preorder) {
+    int idx = 0;
+    return buildBST(preorder, idx, INT_MAX);
+}`,
+        variations: [],
+        gotchas: ["Passing a shrinking upper `bound` down through the recursion is what lets this build the tree in one O(n) pass — without it, you'd fall back to O(n²) repeated insertion."]
+      }
+    ]
+  },
+
+  {
+    id: "bst-advanced",
+    name: "BST Properties & Advanced Problems",
+    color: "#f06292",
+    icon: "bst-advanced",
+    trigger: "Validate, iterate through, or repair a BST · find ranks/ancestors/pairs using the BST ordering property",
+    summary: "These lean on the inorder-traversal-is-sorted fact from every angle — validating it, walking it lazily, finding neighbors within it, or noticing when it's been broken.",
+    problems: [
+      {
+        name: "Check if a Tree Is a Valid BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/validate-binary-search-tree/",
+        idea: "Checking only `node.left.val < node.val < node.right.val` at each node isn't enough — a node deep in the left subtree could still violate the rule against a distant ancestor, not just its direct parent. Instead, pass a valid (min, max) RANGE down through the recursion: every node must fall strictly within its inherited range, and each child narrows that range further (left child's max becomes the current value, right child's min becomes the current value).",
+        time: "O(n)", space: "O(h)",
+        code: `bool isValidBST(TreeNode* root, long minVal = LONG_MIN, long maxVal = LONG_MAX) {
+    if (!root) return true;
+    if (root->val <= minVal || root->val >= maxVal) return false;
+    return isValidBST(root->left, minVal, root->val) && isValidBST(root->right, root->val, maxVal);
+}`,
+        variations: [],
+        gotchas: ["Checking only against the immediate parent (instead of the full inherited range) is the classic wrong-but-tempting shortcut — it misses violations against grandparents and higher ancestors."]
+      },
+      {
+        name: "Kth Smallest Element in a BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+        idea: "Since inorder traversal visits BST values in sorted order, the Kth smallest value is simply the Kth value inorder traversal produces. Do an inorder walk, counting as you go, and stop the moment the count reaches k — no need to collect every value into a list first.",
+        time: "O(h + k)", space: "O(h)",
+        code: `int kthSmallest(TreeNode* root, int k) {
+    stack<TreeNode*> st;
+    TreeNode* cur = root;
+    while (cur || !st.empty()) {
+        while (cur) { st.push(cur); cur = cur->left; }
+        cur = st.top(); st.pop();
+        if (--k == 0) return cur->val;
+        cur = cur->right;
+    }
+    return -1;
+}`,
+        variations: ["Kth Largest Element in a BST (identical idea, but traverse right-root-left instead of left-root-right)"],
+        gotchas: []
+      },
+      {
+        name: "Lowest Common Ancestor in a BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+        idea: "The general Binary Tree LCA algorithm works here too, but the BST ordering property gives a much simpler O(h) approach: starting at the root, if BOTH targets are smaller than the current node, the LCA must be in the left subtree; if both are bigger, it's in the right subtree. The moment the targets split to different sides (or one equals the current node), that current node IS the LCA — their paths from the root just diverged right here.",
+        time: "O(h)", space: "O(1) iterative",
+        code: `TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    while (root) {
+        if (p->val < root->val && q->val < root->val) root = root->left;
+        else if (p->val > root->val && q->val > root->val) root = root->right;
+        else return root; // split point, or one target equals the current node
+    }
+    return nullptr;
+}`,
+        variations: [],
+        gotchas: ["This is dramatically simpler than the general Binary Tree LCA — reaching for the harder recursive version out of habit, without noticing the BST property, is a common miss."]
+      },
+      {
+        name: "Inorder Successor and Predecessor in a BST",
+        difficulty: "Medium",
+        link: "https://www.geeksforgeeks.org/dsa/inorder-predecessor-successor-given-key-bst/",
+        idea: "The successor (next bigger value) and predecessor (next smaller value) can both be found in one O(h) walk each, without doing a full inorder traversal. For the successor: walk down, and every time you go LEFT (current node is bigger than the target), that node is a candidate successor — keep the last one recorded. Mirror the logic (go right, record candidates) for the predecessor.",
+        time: "O(h)", space: "O(1)",
+        code: `TreeNode* inorderSuccessor(TreeNode* root, int key) {
+    TreeNode* successor = nullptr;
+    while (root) {
+        if (key < root->val) { successor = root; root = root->left; }
+        else root = root->right;
+    }
+    return successor;
+}
+TreeNode* inorderPredecessor(TreeNode* root, int key) {
+    TreeNode* predecessor = nullptr;
+    while (root) {
+        if (key > root->val) { predecessor = root; root = root->right; }
+        else root = root->left;
+    }
+    return predecessor;
+}`,
+        variations: [],
+        gotchas: []
+      },
+      {
+        name: "BST Iterator",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/binary-search-tree-iterator/",
+        idea: "Rather than doing a full inorder traversal upfront and storing every value (O(n) space), simulate the traversal LAZILY using an explicit stack. Push all left-children down to the leftmost node upfront; each `next()` call pops the top, and if that popped node has a right child, pushes that child and ITS leftmost chain — producing values one at a time in sorted order without ever materializing the full list.",
+        time: "O(1) amortized per next()/hasNext() call", space: "O(h)",
+        code: `class BSTIterator {
+    stack<TreeNode*> st;
+    void pushLeftChain(TreeNode* node) {
+        while (node) { st.push(node); node = node->left; }
+    }
+public:
+    BSTIterator(TreeNode* root) { pushLeftChain(root); }
+    int next() {
+        TreeNode* node = st.top(); st.pop();
+        pushLeftChain(node->right);
+        return node->val;
+    }
+    bool hasNext() { return !st.empty(); }
+};`,
+        variations: [],
+        gotchas: ["This is the Morris-adjacent idea of 'traverse without doing all the work upfront' — the stack only ever holds O(h) nodes at a time, not the full tree."]
+      },
+      {
+        name: "Two Sum in a BST",
+        difficulty: "Medium",
+        link: "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/",
+        idea: "This is the array Two Sum problem wearing a BST costume. The cleanest fix: do an inorder traversal to get all values in SORTED order (an array), then run the standard two-pointer sweep from both ends. Alternatively, a hash set works too — walk the tree in any order, and for each node check if `target - node.val` has already been seen.",
+        time: "O(n)", space: "O(n)",
+        code: `void inorder(TreeNode* root, vector<int>& values) {
+    if (!root) return;
+    inorder(root->left, values);
+    values.push_back(root->val);
+    inorder(root->right, values);
+}
+bool findTarget(TreeNode* root, int k) {
+    vector<int> values;
+    inorder(root, values);
+    int l = 0, r = values.size() - 1;
+    while (l < r) {
+        int sum = values[l] + values[r];
+        if (sum == k) return true;
+        sum < k ? l++ : r--;
+    }
+    return false;
+}`,
+        variations: [],
+        gotchas: ["Once converted to a sorted array via inorder traversal, this is IDENTICAL to the Two Pointers pattern's Two Sum II problem in the Arrays topic — same trick, different starting shape."]
+      },
+      {
+        name: "Recover BST (Two Nodes Swapped)",
+        difficulty: "Hard",
+        link: "https://leetcode.com/problems/recover-binary-search-tree/",
+        idea: "Exactly two nodes have been swapped, breaking the sorted-inorder property at one or two places. Do an inorder traversal, comparing each value to the previous one — a 'dip' (current value smaller than previous) marks a violation. With one dip, the two swapped nodes are the two endpoints of that single dip. With two SEPARATE dips (the swapped nodes are farther apart in the traversal), the first violation's FIRST node and the second violation's SECOND node are the ones to swap back.",
+        time: "O(n)", space: "O(h)",
+        code: `void recoverTree(TreeNode* root) {
+    TreeNode *first = nullptr, *second = nullptr, *prev = nullptr;
+    stack<TreeNode*> st;
+    TreeNode* cur = root;
+    while (cur || !st.empty()) {
+        while (cur) { st.push(cur); cur = cur->left; }
+        cur = st.top(); st.pop();
+        if (prev && prev->val > cur->val) {
+            if (!first) first = prev;   // first violation's earlier node
+            second = cur;               // always update — catches the second dip if it exists
+        }
+        prev = cur;
+        cur = cur->right;
+    }
+    swap(first->val, second->val);
+}`,
+        variations: [],
+        gotchas: ["`second` gets updated on EVERY dip found, not just the first — that's what correctly grabs the far-apart swapped node when the two violations occur in two separate places in the traversal."]
+      },
+      {
+        name: "Largest BST Subtree in a Binary Tree",
+        difficulty: "Hard",
+        link: "https://www.geeksforgeeks.org/dsa/find-the-largest-subtree-in-a-tree-that-is-also-a-bst/",
+        idea: "For each node, you need to know from its children: are they valid BSTs, and if so, what's their min/max value and size? Do this bottom-up in one post-order pass — each node returns a small struct (isBST, min, max, size). A node combines its children's info: it forms a valid BST itself only if both children are valid BSTs AND its own value fits between the left child's max and the right child's min. Track the largest valid BST size seen anywhere during this single pass.",
+        time: "O(n)", space: "O(h)",
+        code: `struct Info { bool isBST; int minVal, maxVal, size; };
+int best = 0;
+Info largestBSTHelper(TreeNode* root) {
+    if (!root) return {true, INT_MAX, INT_MIN, 0};
+    Info left = largestBSTHelper(root->left);
+    Info right = largestBSTHelper(root->right);
+    if (left.isBST && right.isBST && root->val > left.maxVal && root->val < right.minVal) {
+        int size = left.size + right.size + 1;
+        best = max(best, size);
+        return {true, min(left.minVal, root->val), max(right.maxVal, root->val), size};
+    }
+    return {false, 0, 0, 0}; // not a valid BST — values don't matter once isBST is false
+}
+int largestBSTSubtree(TreeNode* root) {
+    best = 0;
+    largestBSTHelper(root);
+    return best;
+}`,
+        variations: [],
+        gotchas: ["This is functionally the 'Balanced Binary Tree' trick again — computing everything needed in a single bottom-up pass instead of a separate O(n) validity check per node, which would give a much slower O(n²)."]
+      }
+    ]
   }
 ];
 
@@ -851,7 +1174,9 @@ const TRIGGER_TABLE = [
   { keyword: "Rebuild a tree from traversal orders, or serialize it", pattern: "tree-construction" },
   { keyword: "Traverse with zero extra memory, no stack or recursion", pattern: "morris-traversal" },
   { keyword: "What the tree looks like from the top/bottom/side", pattern: "tree-views" },
-  { keyword: "Paths, common ancestors, or spreading outward from a node", pattern: "tree-paths-ancestors" }
+  { keyword: "Paths, common ancestors, or spreading outward from a node", pattern: "tree-paths-ancestors" },
+  { keyword: "Search, insert, delete, or build a BST", pattern: "bst-basics" },
+  { keyword: "Validate, iterate through, or repair a BST", pattern: "bst-advanced" }
 ];
 
   window.TOPIC_REGISTRY = window.TOPIC_REGISTRY || {};
