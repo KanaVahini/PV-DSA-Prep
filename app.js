@@ -100,7 +100,15 @@
     "stack-fundamentals": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="4" width="14" height="4" rx="1"/><rect x="5" y="10" width="14" height="4" rx="1"/><rect x="5" y="16" width="14" height="4" rx="1"/></svg>`,
     "bracket-matching": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"/><path d="M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg>`,
     "area-water": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M9 20V6M14 20V13M19 20V8"/><path d="M2 16q2-1.5 4 0t4 0 4 0 4 0" opacity="0.6"/></svg>`,
-    "design-structures": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/><circle cx="17.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/></svg>`
+    "design-structures": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/><circle cx="17.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/></svg>`,
+    // Recursion (grouped by shared recursive technique)
+    "recursion-divide-conquer": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="7" height="7" rx="1.5"/><rect x="14" y="10" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.3"/><path d="M12 4v4M8.5 10 12 6.5 15.5 10"/></svg>`,
+    "recursion-pick-notpick": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.4" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="2.4" opacity="0.35"/><path d="M8.4 6h5.6M8.4 18h5.6" opacity="0.7"/><circle cx="18" cy="6" r="2" opacity="0.35"/><circle cx="18" cy="18" r="2" fill="currentColor" stroke="none"/></svg>`,
+    "recursion-build-sequence": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M6.5 12h3"/><circle cx="11" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 12h3" stroke-dasharray="1.8 1.8"/><circle cx="18.5" cy="12" r="1.6" opacity="0.35"/></svg>`,
+    "recursion-combos-start-index": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="3" y="14" width="6" height="6" rx="1" fill="currentColor" opacity="0.3"/><rect x="14" y="4" width="7" height="6" rx="1" fill="currentColor" opacity="0.3"/><rect x="14" y="14" width="7" height="6" rx="1"/><path d="M9 7h5M9 17h5" stroke-dasharray="1.5 1.5"/></svg>`,
+    "recursion-partition": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 18h16"/><path d="M9 6v12M16 6v12" stroke-dasharray="2 2"/></svg>`,
+    "recursion-grid-dfs": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.35"/><path d="M5 5 9 9M9 9v6M9 15h6M15 15l4 4" stroke-linecap="round"/></svg>`,
+    "recursion-constraint-placement": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.3"/><path d="M17 6.2 18.6 7.8 21.5 4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -664,7 +672,7 @@
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Update: BST added in Binary Trees";
+      banner.textContent = "Update: Recursion added..";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
