@@ -687,7 +687,7 @@
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Update: BST added in Binary Trees";
+      banner.textContent = "Update: Tries, Strings nd Heaps added.";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
