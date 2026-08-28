@@ -118,7 +118,12 @@
     "string-frequency": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M9 20V9M14 20V15M19 20V6" stroke-width="2.4"/><path d="M4 13h.01M9 9h.01M14 15h.01M19 6h.01" opacity="0"/></svg>`,
     "string-structural-trick": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h11"/><path d="M11 8l4 4-4 4"/><circle cx="19" cy="12" r="2" fill="currentColor" stroke="none"/></svg>`,
     "string-rebuild-pieces": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="5" height="5" rx="1" opacity="0.35"/><rect x="10" y="5" width="5" height="5" rx="1" opacity="0.35"/><rect x="17" y="5" width="4" height="5" rx="1" opacity="0.35"/><path d="M12 13v2"/><rect x="4" y="17" width="16" height="4" rx="1" fill="currentColor" stroke="none"/></svg>`,
-    "string-bracket-balance": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"/><path d="M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3" opacity="0.4"/></svg>`
+    "string-bracket-balance": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"/><path d="M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3" opacity="0.4"/></svg>`,
+    // Heaps (grouped by shared heap technique)
+    "heap-core-mechanics": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none"/><path d="M12 6.3v2.6"/><circle cx="7" cy="11" r="1.8" opacity="0.35"/><circle cx="17" cy="11" r="1.8" opacity="0.35"/><path d="M10.5 9.5 8 10.4M13.5 9.5 16 10.4"/><path d="M4 20.5 7 13M17 13l3 7.5" opacity="0.6"/></svg>`,
+    "heap-insert-extract": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.8" fill="currentColor" stroke="none"/><path d="M12 6.8v2.4"/><circle cx="7.5" cy="12" r="1.6" opacity="0.35"/><circle cx="16.5" cy="12" r="1.6" opacity="0.35"/><path d="M6 18.5v-3.5l1.5-2M18 18.5v-3.5l-1.5-2" opacity="0.6"/><path d="M5 21.5 6 18.5M18 18.5l1 3"/></svg>`,
+    "heap-bounded-topk": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2" opacity="0.35"/><path d="M7 10h10M7 13h6"/><path d="M8 20h8M12 16v4"/></svg>`,
+    "heap-advanced": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6" r="1.7" opacity="0.4"/><circle cx="17" cy="6" r="1.7" fill="currentColor" stroke="none"/><path d="M7 7.7v3.3M17 7.7v3.3" opacity="0.6"/><circle cx="7" cy="14" r="1.7" fill="currentColor" stroke="none"/><circle cx="17" cy="14" r="1.7" opacity="0.4"/><path d="M7 15.7v3.3M17 15.7v3.3" opacity="0.6"/><path d="M9.5 18h5" opacity="0.5"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -682,7 +687,7 @@
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Update: Tries and Strings added";
+      banner.textContent = "Update: BST added in Binary Trees";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
