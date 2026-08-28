@@ -112,7 +112,13 @@
     // Tries (grouped by shared trie technique)
     "trie-core": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none"/><path d="M12 6.3v3"/><circle cx="6" cy="12.5" r="1.8" opacity="0.35"/><circle cx="12" cy="12.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="18" cy="12.5" r="1.8" opacity="0.35"/><path d="M7.3 11 10.7 9.3M12 11.3v-2M16.7 11 13.3 9.3"/><path d="M6 14.3v3M12 14.3v3M18 14.3v3"/><circle cx="6" cy="19" r="1.6" opacity="0.35"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="1.6" opacity="0.35"/></svg>`,
     "trie-string-traversal": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.7" opacity="0.35"/><path d="M12 6.2v2.6"/><circle cx="7" cy="11" r="1.7" opacity="0.35"/><circle cx="17" cy="11" r="1.7" fill="currentColor" stroke="none"/><path d="M10.6 9.6 8.2 9.9M13.4 9.6 15.8 9.9"/><path d="M17 12.7v2.6"/><circle cx="17" cy="18" r="1.7" fill="currentColor" stroke="none"/><path d="M4 20h5" opacity="0.7"/></svg>`,
-    "trie-bitwise-xor": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.7" opacity="0.35"/><path d="M12 6.2v2.6"/><circle cx="7" cy="11" r="1.7" opacity="0.35"/><circle cx="17" cy="11" r="1.7" fill="currentColor" stroke="none"/><path d="M10.6 9.6 8.2 9.9M13.4 9.6 15.8 9.9"/><path d="M4.5 15.5 7 13M7 13l2.5 2.5M4.5 13l2.5 2.5" opacity="0.6"/><path d="M14.5 15.5 17 13M17 13l2.5 2.5M14.5 13l2.5 2.5"/></svg>`
+    "trie-bitwise-xor": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.7" opacity="0.35"/><path d="M12 6.2v2.6"/><circle cx="7" cy="11" r="1.7" opacity="0.35"/><circle cx="17" cy="11" r="1.7" fill="currentColor" stroke="none"/><path d="M10.6 9.6 8.2 9.9M13.4 9.6 15.8 9.9"/><path d="M4.5 15.5 7 13M7 13l2.5 2.5M4.5 13l2.5 2.5" opacity="0.6"/><path d="M14.5 15.5 17 13M17 13l2.5 2.5M14.5 13l2.5 2.5"/></svg>`,
+    // Strings (grouped by shared string-manipulation technique)
+    "string-two-pointer": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="4" rx="1"/><path d="M6 7v3M6 14v3M18 7v3M18 14v3"/><path d="M8 8.5 5.5 12 8 15.5M16 8.5 18.5 12 16 15.5" opacity="0.7"/></svg>`,
+    "string-frequency": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M9 20V9M14 20V15M19 20V6" stroke-width="2.4"/><path d="M4 13h.01M9 9h.01M14 15h.01M19 6h.01" opacity="0"/></svg>`,
+    "string-structural-trick": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h11"/><path d="M11 8l4 4-4 4"/><circle cx="19" cy="12" r="2" fill="currentColor" stroke="none"/></svg>`,
+    "string-rebuild-pieces": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="5" height="5" rx="1" opacity="0.35"/><rect x="10" y="5" width="5" height="5" rx="1" opacity="0.35"/><rect x="17" y="5" width="4" height="5" rx="1" opacity="0.35"/><path d="M12 13v2"/><rect x="4" y="17" width="16" height="4" rx="1" fill="currentColor" stroke="none"/></svg>`,
+    "string-bracket-balance": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"/><path d="M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3" opacity="0.4"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -676,7 +682,7 @@
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Update: Tries added";
+      banner.textContent = "Update: Tries and Strings added";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
