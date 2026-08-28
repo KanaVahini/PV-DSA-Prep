@@ -108,7 +108,11 @@
     "recursion-combos-start-index": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="3" y="14" width="6" height="6" rx="1" fill="currentColor" opacity="0.3"/><rect x="14" y="4" width="7" height="6" rx="1" fill="currentColor" opacity="0.3"/><rect x="14" y="14" width="7" height="6" rx="1"/><path d="M9 7h5M9 17h5" stroke-dasharray="1.5 1.5"/></svg>`,
     "recursion-partition": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 18h16"/><path d="M9 6v12M16 6v12" stroke-dasharray="2 2"/></svg>`,
     "recursion-grid-dfs": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.35"/><path d="M5 5 9 9M9 9v6M9 15h6M15 15l4 4" stroke-linecap="round"/></svg>`,
-    "recursion-constraint-placement": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.3"/><path d="M17 6.2 18.6 7.8 21.5 4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    "recursion-constraint-placement": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" opacity="0.3"/><path d="M17 6.2 18.6 7.8 21.5 4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    // Tries (grouped by shared trie technique)
+    "trie-core": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none"/><path d="M12 6.3v3"/><circle cx="6" cy="12.5" r="1.8" opacity="0.35"/><circle cx="12" cy="12.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="18" cy="12.5" r="1.8" opacity="0.35"/><path d="M7.3 11 10.7 9.3M12 11.3v-2M16.7 11 13.3 9.3"/><path d="M6 14.3v3M12 14.3v3M18 14.3v3"/><circle cx="6" cy="19" r="1.6" opacity="0.35"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="1.6" opacity="0.35"/></svg>`,
+    "trie-string-traversal": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.7" opacity="0.35"/><path d="M12 6.2v2.6"/><circle cx="7" cy="11" r="1.7" opacity="0.35"/><circle cx="17" cy="11" r="1.7" fill="currentColor" stroke="none"/><path d="M10.6 9.6 8.2 9.9M13.4 9.6 15.8 9.9"/><path d="M17 12.7v2.6"/><circle cx="17" cy="18" r="1.7" fill="currentColor" stroke="none"/><path d="M4 20h5" opacity="0.7"/></svg>`,
+    "trie-bitwise-xor": `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.7" opacity="0.35"/><path d="M12 6.2v2.6"/><circle cx="7" cy="11" r="1.7" opacity="0.35"/><circle cx="17" cy="11" r="1.7" fill="currentColor" stroke="none"/><path d="M10.6 9.6 8.2 9.9M13.4 9.6 15.8 9.9"/><path d="M4.5 15.5 7 13M7 13l2.5 2.5M4.5 13l2.5 2.5" opacity="0.6"/><path d="M14.5 15.5 17 13M17 13l2.5 2.5M14.5 13l2.5 2.5"/></svg>`
   };
 
   function hexToRgba(hex, alpha) {
@@ -672,7 +676,7 @@
     const banner = document.getElementById("sync-banner");
     const dot = document.getElementById("sync-dot");
     if (isFirebase) {
-      banner.textContent = "Update: Recursion added..";
+      banner.textContent = "Update: Tries added";
       banner.classList.add("show", "ok");
       if (dot) dot.classList.add("ok");
     } else {
